@@ -1,0 +1,6 @@
+{
+  "name": "FavStatusGet",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./FavStatusGet.js"
+}

@@ -1,0 +1,6 @@
+{
+  "name": "CardReportPeriod",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./CardReportPeriod.js"
+}

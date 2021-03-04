@@ -1,0 +1,6 @@
+{
+  "name": "DailyAssessmentInput",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./DailyAssessmentInput.js"
+}

@@ -1,0 +1,6 @@
+{
+  "name": "BodyGet",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./BodyGet.js"
+}

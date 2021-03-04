@@ -1,0 +1,6 @@
+{
+  "name": "CardReport",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./CardReport.js"
+}

@@ -1,0 +1,6 @@
+{
+  "name": "FavoriteAdd",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./FavoriteAdd.js"
+}

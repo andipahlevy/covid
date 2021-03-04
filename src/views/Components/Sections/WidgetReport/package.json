@@ -1,0 +1,6 @@
+{
+  "name": "WidgetReport",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./WidgetReport.js"
+}

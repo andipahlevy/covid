@@ -1,0 +1,6 @@
+{
+  "name": "Outstanding",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./Outstanding.js"
+}

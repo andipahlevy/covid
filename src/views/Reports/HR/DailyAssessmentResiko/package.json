@@ -1,0 +1,6 @@
+{
+  "name": "DailyAssessmentResiko",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./DailyAssessmentResiko.js"
+}
