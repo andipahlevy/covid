@@ -57,7 +57,8 @@ class DailyAssessmentInput extends Component {
 			reason			: '',
 			condition		: '',
 			condition_desc	: '',
-			company_data	: []
+			company_data	: [],
+			isLoading	: false,
 		}
 	}
 
@@ -145,6 +146,7 @@ class DailyAssessmentInput extends Component {
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(this.state)
 		};
+		this.setState({isLoading:true})
 		fetch(apiUri+'karantina/save.php', requestOptions)
 			.then(response => response.json())
 			.then(data => {
@@ -154,6 +156,7 @@ class DailyAssessmentInput extends Component {
 					alert(data.messages)
 				}
 				console.log(data)
+				this.setState({isLoading:false})
 			});
 	}
 
@@ -259,7 +262,7 @@ class DailyAssessmentInput extends Component {
 					
 					<Row>
                       <Col xs="6">
-                        <Button onClick={this.save} color="success" active>Simpan</Button>
+                        <Button onClick={this.save} color="success" active>{this.state.isLoading?'Menyimpan...':'Simpan'}</Button>
 						<Link to="/karantina/outstanding">
 							<Button color="default" active>Batal</Button>
 						</Link>
