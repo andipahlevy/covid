@@ -33,8 +33,7 @@ import {
 	ButtonProcess,
 } from '../../../Components';
 import {
-	pathAPIServer,
-	pathReportDetail,
+	apiUri
 } from '../../../Constants';
 
 class DailyAssessmentInput extends Component {
@@ -42,7 +41,9 @@ class DailyAssessmentInput extends Component {
 
 	constructor(props) {
 		super(props);
-		
+		if(!localStorage.getItem('login')){
+			this.props.history.push('/login');
+		}
 		this.state = {
 			
 			ba				: '',
@@ -61,7 +62,7 @@ class DailyAssessmentInput extends Component {
 	}
 
 	async componentDidMount() {
-		fetch('http://localhost/covid-api/master/company.php')
+		fetch(apiUri+'master/company.php')
         .then(response => response.json())
         .then(data => {
 			if(data.code==200){
@@ -144,7 +145,7 @@ class DailyAssessmentInput extends Component {
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(this.state)
 		};
-		fetch('http://localhost/covid-api/karantina/save.php', requestOptions)
+		fetch(apiUri+'karantina/save.php', requestOptions)
 			.then(response => response.json())
 			.then(data => {
 				if(data.code == 200){

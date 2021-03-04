@@ -110,7 +110,7 @@ export default {
 		{
 			name: 'Karantina Report',
 			icon: 'icon-people',
-			url: '/karantina/outstanding',
+			url: '/karantina/report',
 		},
 	],
 };

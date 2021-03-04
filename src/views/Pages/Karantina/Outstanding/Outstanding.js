@@ -18,8 +18,7 @@ import {
 	ButtonProcess,
 } from '../../../Components';
 import {
-	pathAPIServer,
-	pathReportDetail,
+	apiUri
 } from '../../../Constants';
 
 class DailyAssessmentInput extends Component {
@@ -27,7 +26,9 @@ class DailyAssessmentInput extends Component {
 
 	constructor(props) {
 		super(props);
-		
+		if(!localStorage.getItem('login')){
+			this.props.history.push('/login');
+		}
 		this.state = {
 			grid: [],
 			willUpdate: [],
@@ -49,7 +50,7 @@ class DailyAssessmentInput extends Component {
 		this.setState({detail: []},this.toggle())
 		
 		
-		fetch('http://localhost/covid-api/karantina/detail.php?id='+this.state.grid[i].id)
+		fetch(apiUri+'karantina/detail.php?id='+this.state.grid[i].id)
         .then(response => response.json())
         .then(data => {
 			if(data.code==200){
@@ -63,7 +64,7 @@ class DailyAssessmentInput extends Component {
 	}
 	
 	fetchData = ()=>{
-		fetch('http://localhost/covid-api/karantina/get.php')
+		fetch(apiUri+'karantina/get.php')
         .then(response => response.json())
         .then(data => {
 			if(data.code==200){
@@ -159,7 +160,7 @@ class DailyAssessmentInput extends Component {
 			body: JSON.stringify(this.state.willUpdate)
 		};
 		let dis = this
-		fetch('http://localhost/covid-api/karantina/update.php', requestOptions)
+		fetch(apiUri+'karantina/update.php', requestOptions)
 			.then(response => response.json())
 			.then(data => {
 				if(data.code == 200){

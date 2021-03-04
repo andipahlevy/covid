@@ -1,6 +1,6 @@
 {
-  "name": "Detail",
+  "name": "Report",
   "version": "0.0.0",
   "private": true,
-  "main": "./Detail.js"
+  "main": "./Report.js"
 }

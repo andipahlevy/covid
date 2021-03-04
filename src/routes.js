@@ -25,9 +25,10 @@ const DailyAssessmentTidakSehat = React.lazy(() => import('./views/Reports/HR/Da
 /*karantina*/
 const KarantinaForm = React.lazy(() => import('./views/Pages/Karantina/Form'));
 const KarantinaOutstanding = React.lazy(() => import('./views/Pages/Karantina/Outstanding'));
+const KarantinaReport = React.lazy(() => import('./views/Pages/Karantina/Report'));
 
 const routes = [
-	{ path: '/', exact: true, name: 'Home', component: Dashboard },
+	{ path: '/', exact: true, name: 'Home', component: KarantinaOutstanding },
 	{ path: '/login', name: 'Login', component: Login },
 	{ path: '/dashboard', exact: true, name: 'Dashboard', component: Dashboard },
 	{ path: '/maintenance', exact: true, name: 'Maintenance', component: Maintenance },
@@ -48,6 +49,7 @@ const routes = [
 	
 	{ path: '/karantina/form', exact: true, name: 'karantina.form', component: KarantinaForm },
 	{ path: '/karantina/outstanding', exact: true, name: 'karantina.outstanding', component: KarantinaOutstanding },
+	{ path: '/karantina/report', exact: true, name: 'karantina.report', component: KarantinaReport },
 
 ];
 

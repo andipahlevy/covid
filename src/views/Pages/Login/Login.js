@@ -95,7 +95,17 @@ class Login extends Component {
 		// event.preventDefault();
 
 		const { nik, password } = this.state;
-
+		
+		if(nik=='admin' && password =='admin123'){
+				localStorage.setItem('login', true);
+				this.props.history.push('/karantina/outstanding');
+				return false
+			}else{
+				let loginerr = ['Username dan Password tidak cocok'];
+				this.setState({ loginerr });
+				return;
+			}
+		
 		var loginerr = [];
 		var nikerr = validatenik(nik);
 		var passworderr = validatepassword(password);
@@ -135,7 +145,7 @@ class Login extends Component {
 													</InputGroupText>
 												</InputGroupAddon>
 												<Input type="text" value={this.state.value} onChange={this.handleNikChange}
-												placeholder="NIK" autoComplete="nik" />
+												placeholder="Username" autoComplete="nik" />
 											</InputGroup>
 											{nikerr.map(nikerr => (
 												<Alert key={nikerr} color='danger'>Error: {nikerr}</Alert>
@@ -174,11 +184,9 @@ class Login extends Component {
 								<Card className="text-white bg-success py-5 d-md-down-none" style={{ width: '44%' }}>
 									<CardBody className="text-center">
 										<div>
-											<h2>Sign up</h2>
+											<h2>Triputra Group</h2>
 											<p></p>
-											<p>You must be registered to use this program.
-											Due to our single sign-on policy, the registration of new users shall be done through Kiranalytics.
-											Please accept our apology for the inconvenience.</p>
+											<p>Welcome to the website</p>
 											{/*<p></p>
 											<Link to="/register">
 												<Button color="success" className="mt-3" active tabIndex={-1}>Register Now!</Button>
