@@ -21,8 +21,6 @@ import {
 	apiUri
 } from '../../../Constants';
 
-import LoadingOverlay from 'react-loading-overlay';
-
 class DailyAssessmentInput extends Component {
 	_isMounted = false;
 
@@ -66,18 +64,16 @@ class DailyAssessmentInput extends Component {
 	}
 	
 	fetchData = ()=>{
-		this.setState({isLoading:true})
 		fetch(apiUri+'karantina/get.php')
         .then(response => response.json())
         .then(data => {
 			if(data.code==200){
 				this.setState({grid: data.contents})
 			}
-			this.setState({isLoading:false})
 		});
 	}
 	
-	handleSurveyDateChange_x = (e,i)=>{
+	handleSurveyDateChange = (e,i)=>{
 		if(this.state.grid[i].survey_date_ori != e.target.value){
 			let st = [...this.state.grid]
 			let item = st[i]
@@ -98,47 +94,32 @@ class DailyAssessmentInput extends Component {
 		}
 	}
 	
-	handleSurveyDateChange = (e,i)=>{
+	handleConditionChange = (e, i )=>{
 		let val = e.target.value
-		let dis = this
-		this.setState({isLoading:true})
-		fetch(apiUri+'karantina/getOne.php?id='+this.state.grid[i].id+'&survey_date='+e.target.value)
-        .then(response => response.json())
-        .then(data => {
-			if(data.code==200){
-				if(data.contents){
-					let tofetch = data.contents[0]
-					let st = [...dis.state.grid]
-					let item = st[i]
-					item.survey_date = val
-					item.condition = tofetch.condition
-					item.condition_desc = tofetch.condition_desc
-					st[i] = item
-					dis.setState({grid: st})
-				}else{
-					let st = [...dis.state.grid]
-					console.log(st)
-					let item = st[i]
-					console.log(item)
-					item.survey_date = val
-					item.condition = ''
-					item.condition_desc = ''
-					st[i] = item
-					dis.setState({grid: st})
+		if(this.state.edited >= 0){
+			console.log('nie')
+			
+			if(val != 'Pilih'){
+				this.setState({edited: (this.state.edited+1)})
+				let ceki = this.state.willUpdate.filter(will => will.id == this.state.grid[i].id)
+				if(ceki.length==0){
+					this.state.willUpdate.push({
+						id: this.state.grid[i].id,
+						survey_date: this.state.grid[i].survey_date,
+						condition: val,
+						condition_desc: this.state.grid[i].con_desc,
+					})	
 				}
 			}else{
-				alert(data.messages)
+				if(this.state.edited > 0){
+					this.deleteWillUpdate(this.state.grid[i].id)
+					this.setState({edited: (this.state.edited-1)})
+				}
 			}
-			this.setState({isLoading:false})
-		});
-	}
-	
-	handleConditionChange = (e, i )=>{
-		let st = [...this.state.grid]
-		let item = st[i]
-		item.condition = e.target.value
-		st[i] = item
-		this.setState({grid: st})
+		}
+		
+		console.log('Edited: ',this.state.edited)
+		console.log(val, i)
 	}
 	
 	deleteWillUpdate(idToDelete) {
@@ -151,9 +132,20 @@ class DailyAssessmentInput extends Component {
 	handleConditionDescChange = (e, i )=>{
 		let st = [...this.state.grid]
 		let item = st[i]
-		item.condition_desc = e.target.value
+		item.con_desc = e.target.value
 		st[i] = item
 		this.setState({grid: st})
+		
+		let idx = this.state.grid[i].id
+		let ceki = this.state.willUpdate.filter(will => will.id == this.state.grid[i].id)
+		if(ceki.length > 0){
+			let wu = [...this.state.willUpdate]
+			const index = wu.findIndex(p =>{
+				return p.id === idx
+			})
+			wu[index].condition_desc = e.target.value
+			this.setState({willUpdate: wu})
+		}
 	}
 
 	componentWillUnmount() {
@@ -165,14 +157,14 @@ class DailyAssessmentInput extends Component {
 		const requestOptions = {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(this.state.grid)
+			body: JSON.stringify(this.state.willUpdate)
 		};
 		let dis = this
 		fetch(apiUri+'karantina/update.php', requestOptions)
 			.then(response => response.json())
 			.then(data => {
 				if(data.code == 200){
-					
+					dis.fetchData()
 				}else{
 					alert(data.messages)
 				}
@@ -186,7 +178,6 @@ class DailyAssessmentInput extends Component {
 			// return <p>Loading ...</p>;
 		// }
 		return (<div className="app flex-row">
-		
         <Container className="p-3">
           <Row className="justify-content-center">
             <Col md="12" lg="12" xl="12">
@@ -195,14 +186,9 @@ class DailyAssessmentInput extends Component {
 				<Link to="/karantina/form">
 					<Button color="success" active><i className="fa fa-plus"></i> Tambah Data Karantina</Button>
                 </Link>
-				<Button color="primary" active onClick={this.save} className="float-right" style={{display: this.state.willUpdate.length>0?'block':'block'}}><i className="fa fa-save"></i> {this.state.isLoading?'Updating...':'Update'}</Button>
+				<Button color="primary" active onClick={this.save} className="float-right" style={{display: this.state.willUpdate.length>0?'block':'none'}}><i className="fa fa-save"></i> {this.state.isLoading?'Menyimpan':'Simpan'}</Button>
               </CardHeader>
               <CardBody>
-			  <LoadingOverlay
-  active={this.state.isLoading}
-  spinner
-  text='Processing...'
-  >
 				<h3>Data Karantina</h3>
                 <Table responsive>
                   <thead>
@@ -237,14 +223,11 @@ class DailyAssessmentInput extends Component {
 								<Input type="date" defaultValue={item.survey_date} max={item.survey_date_max} min={item.min_start_date} onChange={(event)=>this.handleSurveyDateChange(event, i)} placeholder="" />
 							</td>
 							<td>
-								<Input type="select" value={item.condition} onChange={(event)=>this.handleConditionChange(event, i)}>
-									<option></option>
-									<option>Sehat</option>
-									<option>Sakit</option>
-									<option>Selesai Karantina</option>
-								</Input>
+								{item.condition ? (<Badge color="success">{item.condition}</Badge>): (<Input type="select" onChange={(event)=>this.handleConditionChange(event, i)}><option>Pilih</option>
+                        <option>Sehat</option>
+                        <option>Sakit</option></Input>)}
 							</td>
-							<td><Input type="text" value={item.condition_desc} onChange={(event)=>this.handleConditionDescChange(event, i)}/></td>
+							<td>{item.condition_desc ? item.condition_desc : (<Input type="text" onChange={(event)=>this.handleConditionDescChange(event, i)}/>)}</td>
 							<td>
 								<Button onClick={(e)=>this.viewDetail(e,i)} color="success" className="btn-sm" active><i className="fa fa-eye"></i></Button>
 							</td>
@@ -258,7 +241,7 @@ class DailyAssessmentInput extends Component {
                             <ModalHeader toggle={this.toggle}>Info Riwayat Declare</ModalHeader>
                             <ModalBody>
 							{this.state.detail.length == 0 ? 'Please wait...' : ''}
-								<Table responsive style={{display:this.state.detail.length==0?'none':'inline-table', width:'100%'}}>
+								<Table responsive>
 								  <thead>
 								  <tr>
 									<th>Tanggal Declare</th>
@@ -309,13 +292,10 @@ class DailyAssessmentInput extends Component {
                 </Pagination>	
 				*/}
 				
-</LoadingOverlay>
               </CardBody>
             </Card>
             </Col>
           </Row>
-		  
-  
         </Container>
       </div>)
 

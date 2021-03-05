@@ -35,6 +35,7 @@ import {
 import {
 	apiUri
 } from '../../../Constants';
+import LoadingOverlay from 'react-loading-overlay';
 
 class DailyAssessmentInput extends Component {
 	_isMounted = false;
@@ -167,6 +168,11 @@ class DailyAssessmentInput extends Component {
         <Container className="p-5">
           <Row className="justify-content-center">
             <Col md="12" lg="12" xl="12">
+			<LoadingOverlay
+  active={this.state.isLoading}
+  spinner
+  text='Processing...'
+  >
               <Card className="text-black bg-default ">
                 <CardBody className="p-4">
                   <Form onSubmit={this.handleSubmit}>
@@ -272,7 +278,8 @@ class DailyAssessmentInput extends Component {
                   </Form>
                 </CardBody>
               </Card>
-            </Col>
+            </LoadingOverlay>
+			</Col>
           </Row>
         </Container>
       </div>);
