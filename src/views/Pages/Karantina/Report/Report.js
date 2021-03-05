@@ -173,7 +173,7 @@ class DailyAssessmentInput extends Component {
 			  <br/>
 			  <br/>
             </Col>
-            <Col md="3" lg="3" xl="3">
+            <Col md="4" lg="4" xl="4">
               <Card className="text-black bg-default ">
                 <CardBody className="p-4">
                   <h5 class="card-title">Daily Report</h5>
@@ -182,7 +182,7 @@ class DailyAssessmentInput extends Component {
                 </CardBody>
               </Card>
             </Col>
-            <Col md="3" lg="3" xl="3">
+            <Col md="4" lg="4" xl="4">
               <Card className="text-black bg-default ">
                 <CardBody className="p-4">
                   <h5 class="card-title">Daily Summary Report</h5>
@@ -191,7 +191,7 @@ class DailyAssessmentInput extends Component {
                 </CardBody>
               </Card>
             </Col>
-            <Col md="3" lg="3" xl="3">
+            <Col md="4" lg="4" xl="4">
               <Card className="text-black bg-default ">
                 <CardBody className="p-4">
                   <h5 class="card-title">Summary Report</h5>
