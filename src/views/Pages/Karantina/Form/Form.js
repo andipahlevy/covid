@@ -52,7 +52,7 @@ class DailyAssessmentInput extends Component {
 			status			: '',
 			start_date		: '',
 			end_date		: '',
-			duration		: 0,
+			duration		: 1,
 			category		: '',
 			reason			: '',
 			condition		: '',
@@ -221,7 +221,7 @@ class DailyAssessmentInput extends Component {
 					
 					<FormGroup>
                       <Label htmlFor="dur">Lama Karantina</Label>
-                      <Input type="number" name="duration" id="dur" value={this.state.duration} onChange={this.handleDurationChange} min="0" placeholder="Lama Karantina" required />
+                      <Input type="number" name="duration" id="dur" value={this.state.duration} onChange={this.handleDurationChange} min="1" placeholder="Lama Karantina" required />
                     </FormGroup>
 					
 					<FormGroup>
