@@ -232,14 +232,14 @@ class DailyAssessmentInput extends Component {
 								<Input type="date" defaultValue={item.survey_date} max={item.survey_date_max} min={item.min_start_date} onChange={(event)=>this.handleSurveyDateChange(event, i)} placeholder="" />
 							</td>
 							<td>
-								<Input type="select" value={item.condition} onChange={(event)=>this.handleConditionChange(event, i)}>
+								<Input type="select" className="combo_wrap" value={item.condition} onChange={(event)=>this.handleConditionChange(event, i)}>
 									<option></option>
 									<option>Sehat</option>
 									<option>Sakit</option>
 									<option>Selesai Karantina</option>
 								</Input>
 							</td>
-							<td><Input type="text" value={item.condition_desc} onChange={(event)=>this.handleConditionDescChange(event, i)}/></td>
+							<td><Input type="text"  className="combo_wrap" value={item.condition_desc} onChange={(event)=>this.handleConditionDescChange(event, i)}/></td>
 							<td>
 								<Button onClick={(e)=>this.viewDetail(e,i)} color="success" className="btn-sm" active><i className="fa fa-eye"></i></Button>
 							</td>

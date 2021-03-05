@@ -44,3 +44,10 @@
     -webkit-animation: spin .8s linear infinite;
     animation: spin .8s linear infinite;
 }
+.combo_wrap{
+	width: 150px;
+  overflow: hidden;
+  white-space: pre;
+  text-overflow: ellipsis;
+  -webkit-appearance: none;
+}
