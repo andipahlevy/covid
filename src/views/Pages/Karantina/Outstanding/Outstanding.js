@@ -21,10 +21,6 @@ import {
 	apiUri
 } from '../../../Constants';
 
-import { LoadingOverlay, Loader } from 'react-overlay-loader';
- 
-import 'react-overlay-loader/styles.css';
-
 class DailyAssessmentInput extends Component {
 	_isMounted = false;
 
@@ -200,8 +196,8 @@ class DailyAssessmentInput extends Component {
 				<Button color="primary" active onClick={this.save} className="float-right" style={{display: this.state.willUpdate.length>0?'block':'block'}}><i className="fa fa-save"></i> {this.state.isLoading?'Updating...':'Update'}</Button>
               </CardHeader>
               <CardBody>
-			  <LoadingOverlay style={{  }}> 
-            
+			  <div id="cover-spin" style={{ display: this.state.isLoading ? 'block' : 'none' }}></div>
+			  
 				<h3>Data Karantina</h3>
                 <Table responsive>
                   <thead>
@@ -307,8 +303,6 @@ class DailyAssessmentInput extends Component {
                   </PaginationItem>
                 </Pagination>	
 				*/}
-				<Loader loading={this.state.isLoading}/>
-</LoadingOverlay>
               </CardBody>
             </Card>
             </Col>

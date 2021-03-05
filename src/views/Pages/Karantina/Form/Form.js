@@ -35,9 +35,6 @@ import {
 import {
 	apiUri
 } from '../../../Constants';
-import { LoadingOverlay, Loader } from 'react-overlay-loader';
- 
-import 'react-overlay-loader/styles.css';
 
 class DailyAssessmentInput extends Component {
 	_isMounted = false;
@@ -170,8 +167,8 @@ class DailyAssessmentInput extends Component {
         <Container className="p-5">
           <Row className="justify-content-center">
             <Col md="12" lg="12" xl="12">
-			<LoadingOverlay style={{  }}> 
-              <Card className="text-black bg-default ">
+			<div id="cover-spin" style={{ display: this.state.isLoading ? 'block' : 'none' }}></div>
+			<Card className="text-black bg-default ">
                 <CardBody className="p-4">
                   <Form onSubmit={this.handleSubmit}>
                     <h1>Input Karantina Baru</h1>
@@ -276,8 +273,7 @@ class DailyAssessmentInput extends Component {
                   </Form>
                 </CardBody>
               </Card>
-				<Loader loading={this.state.isLoading}/>
-			  </LoadingOverlay>
+				
 			</Col>
           </Row>
         </Container>
