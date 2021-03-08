@@ -45,59 +45,25 @@ class DailyAssessmentInput extends Component {
 			this.props.history.push('/login');
 		}
 		this.state = {
-			
-			ba				: '',
-			bagian			: '',
-			name			: '',
-			status			: '',
 			start_date		: '',
 			end_date		: '',
-			duration		: 0,
-			category		: '',
-			reason			: '',
-			condition		: '',
-			condition_desc	: '',
-			company_data	: []
 		}
 	}
 
 	async componentDidMount() {
-		fetch('http://localhost/covid-api/master/company.php')
-        .then(response => response.json())
-        .then(data => {
-			if(data.code==200){
-				this.setState({company_data: data.contents})
-			}else{
-				alert('Gagal get company');
-			}
-		});
+		
 	}
 
 	componentWillUnmount() {
 		this._isMounted = false;
 	}
 	
-	handleStartDateChange = (e)=>{
+	startDateChange = (e)=>{
 		this.setState({start_date: e.target.value});
-		this.setEndDate(e.target.value, this.state.duration)
 	}
 	
-	handleDurationChange = (e)=>{
-		this.setState({duration: e.target.value});
-		this.setEndDate(this.state.start_date, e.target.value)
-	}
-	
-	setEndDate = (a,b)=>{
-		if(!a){
-			return false
-		}
-		console.log('sd ',a,b)
-		let date 	= new Date(a);
-		let to 		= parseInt(date.getDate()) + (parseInt(b)-1)
-		console.log(to)
-		date.setDate(to);
-		console.log(date)
-		this.setState({end_date:this.formatDate(date)})
+	endDateChange = (e)=>{
+		this.setState({end_date: e.target.value});
 	}
 	
 	formatDate(date) {
@@ -114,52 +80,16 @@ class DailyAssessmentInput extends Component {
 		return [year, month, day].join('-');
 	}
 	
-	handleBaChange = (e)=>{
-		this.setState({ba:e.target.value})
-	}	
-	handleBagianChange = (e)=>{
-		this.setState({bagian:e.target.value})
-	}	
-	handleNameChange = (e)=>{
-		this.setState({name:e.target.value})
-	}
-	handleStatusChange = (e)=>{
-		this.setState({status:e.target.value})
-	}
-	handleCategoryChange = (e)=>{
-		this.setState({category:e.target.value})
-	}
-	handleReasonChange = (e)=>{
-		this.setState({reason:e.target.value})
-	}
-	handleConditionChange = (e)=>{
-		this.setState({condition:e.target.value})
-	}
-	handleConditionDescChange = (e)=>{
-		this.setState({condition_desc:e.target.value})
-	}
 	
-	save = ()=>{
-		const requestOptions = {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(this.state)
-		};
-		fetch('http://localhost/covid-api/karantina/save.php', requestOptions)
-			.then(response => response.json())
-			.then(data => {
-				if(data.code == 200){
-					this.props.history.push('/karantina/outstanding');
-				}else{
-					alert(data.messages)
-				}
-				console.log(data)
-			});
-	}
 	
 	downloadRA = (e)=>{
 		e.preventDefault();
-      window.location.href=apiUri+'report/daily.php';
+		window.location.href=apiUri+'report/daily.php';
+	}
+	
+	downloadRB = (e)=>{
+		e.preventDefault();
+		window.location.href=apiUri+'report/daily_summary.php?start_date='+this.state.start_date+'&end_date='+this.state.end_date;
 	}
 
 	render() {
@@ -169,7 +99,7 @@ class DailyAssessmentInput extends Component {
         <Container className="p-3">
           <Row className="justify-content-left">
             <Col md="12" lg="12" xl="12">
-              <h3>Report Karantina</h3>
+              <h3>Karantina Report</h3>
 			  <br/>
 			  <br/>
             </Col>
@@ -182,16 +112,25 @@ class DailyAssessmentInput extends Component {
                 </CardBody>
               </Card>
             </Col>
-            <Col md="4" lg="4" xl="4">
+            <Col md="8" lg="8" xl="8">
               <Card className="text-black bg-default ">
                 <CardBody className="p-4">
                   <h5 class="card-title">Daily Summary Report</h5>
-					<p class="card-text">Summary report hari ini</p>
-					<a href="#" class="btn btn-primary disabled">Download</a>
+					<p class="card-text">Summary report</p>
+					
+					<InputGroup>
+						<Input type="date" value={this.state.start_date} onChange={this.startDateChange} />
+						<InputGroupAddon addonType="prepend"><InputGroupText>-</InputGroupText></InputGroupAddon>
+						<Input type="date" value={this.state.end_date} onChange={this.endDateChange} />
+						<InputGroupAddon addonType="prepend">
+							<button className="btn btn-primary" onClick={this.downloadRB}>Download</button>
+						</InputGroupAddon>
+                    </InputGroup>
+					
                 </CardBody>
               </Card>
             </Col>
-            <Col md="4" lg="4" xl="4">
+            <Col md="12" lg="12" xl="12">
               <Card className="text-black bg-default ">
                 <CardBody className="p-4">
                   <h5 class="card-title">Summary Report</h5>

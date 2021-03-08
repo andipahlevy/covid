@@ -42,14 +42,16 @@ class DailyAssessmentInput extends Component {
 	constructor(props) {
 		super(props);
 		if(!localStorage.getItem('login')){
-			this.props.history.push('/login');
+			// this.props.history.push('/login');
 		}
 		this.state = {
 			
+			region			: '',
 			ba				: '',
 			bagian			: '',
 			name			: '',
 			status			: '',
+			location		: '',
 			start_date		: '',
 			end_date		: '',
 			duration		: 1,
@@ -58,19 +60,26 @@ class DailyAssessmentInput extends Component {
 			condition		: '',
 			condition_desc	: '',
 			company_data	: [],
+			region_data		: [],
 			isLoading	: false,
+			displayConditionDesc	: 'none',
+			pilNonHO : ['ESTATE 1','ESTATE 2','ESTATE 2','MILL','BULKING','KARET'],
+			pilHO : ['HEAD OFFICE'],
+			pilBagian: []
 		}
 	}
 
 	async componentDidMount() {
-		fetch(apiUri+'master/company.php')
+		this.setState({isLoading:true})
+		fetch(apiUri+'master/region.php')
         .then(response => response.json())
         .then(data => {
 			if(data.code==200){
-				this.setState({company_data: data.contents})
+				this.setState({region_data: data.contents})
 			}else{
-				alert('Gagal get company');
+				alert('Gagal get region');
 			}
+			this.setState({isLoading:false})
 		});
 	}
 
@@ -94,7 +103,7 @@ class DailyAssessmentInput extends Component {
 		}
 		console.log('sd ',a,b)
 		let date 	= new Date(a);
-		let to 		= parseInt(date.getDate()) + (parseInt(b)-1)
+		let to 		= parseInt(date.getDate()) + (parseInt(b))
 		console.log(to)
 		date.setDate(to);
 		console.log(date)
@@ -115,14 +124,43 @@ class DailyAssessmentInput extends Component {
 		return [year, month, day].join('-');
 	}
 	
+	handleRegionChange = (e)=>{
+		let dis = this
+		let val = e.target.value
+		this.setState({isLoading:true})
+		this.setState({region:e.target.value},()=>{
+			fetch(apiUri+'master/company.php?region='+val)
+				.then(response => response.json())
+				.then(data => {
+					if(data.code==200){
+						dis.setState({company_data: data.contents})
+					}else{
+						alert('Gagal get company');
+					}
+					this.setState({isLoading:false})
+				});
+		})
+	}	
+	
 	handleBaChange = (e)=>{
-		this.setState({ba:e.target.value})
+		let dis = this
+		let val = e.target.value
+		this.setState({ba:e.target.value}, ()=>{
+			if(val != 'HEAD OFFICE'){
+				dis.setState({pilBagian:dis.state.pilNonHO})
+			}else{
+				dis.setState({pilBagian:dis.state.pilHO})
+			}
+		})
 	}	
 	handleBagianChange = (e)=>{
 		this.setState({bagian:e.target.value})
 	}	
 	handleNameChange = (e)=>{
-		this.setState({name:e.target.value})
+		this.setState({name:e.target.value.toUpperCase()})
+	}
+	handleLocationChange = (e)=>{
+		this.setState({location:e.target.value})
 	}
 	handleStatusChange = (e)=>{
 		this.setState({status:e.target.value})
@@ -134,7 +172,15 @@ class DailyAssessmentInput extends Component {
 		this.setState({reason:e.target.value})
 	}
 	handleConditionChange = (e)=>{
-		this.setState({condition:e.target.value})
+		let val = e.target.value
+		let dis = this
+		this.setState({condition:e.target.value}, ()=>{
+			if(val =='Sakit'){
+				dis.setState({displayConditionDesc:'block'})
+			}else{
+				dis.setState({displayConditionDesc:'none'})
+			}
+		})
 	}
 	handleConditionDescChange = (e)=>{
 		this.setState({condition_desc:e.target.value})
@@ -172,8 +218,20 @@ class DailyAssessmentInput extends Component {
                 <CardBody className="p-4">
                   <Form onSubmit={this.handleSubmit}>
                     <h1>Input Karantina Baru</h1>
-                    <p className="text-muted">Silahkan input data terbaru.</p>
+                    <p className="text-muted">Silahkan isi semua field pada form berikut.</p>
                    
+                    <FormGroup>
+                      <Label htmlFor="region">Region</Label>
+                      <Input type="select" value={this.state.region} onChange={this.handleRegionChange} name="region" id="region">
+                        <option>-- Pilih --</option>
+						{
+							this.state.region_data.map((item,i)=>{
+								return <option>{item.region_name}</option>
+							})
+						}
+                      </Input>
+                    </FormGroup>
+					
                     <FormGroup>
                       <Label htmlFor="ba">Nama PT</Label>
                       <Input type="select" value={this.state.ba} onChange={this.handleBaChange} name="ba" id="ba">
@@ -190,11 +248,11 @@ class DailyAssessmentInput extends Component {
                       <Label htmlFor="bagian">Bagian</Label>
                       <Input type="select" name="bagian" id="bagian" value={this.state.bagian} onChange={this.handleBagianChange}>
                         <option>-- Pilih --</option>
-                        <option>ESTATE 1</option>
-                        <option>ESTATE 2</option>
-                        <option>ESTATE 3</option>
-                        <option>MILL</option>
-                        <option>BULKING</option>
+						{
+							this.state.pilBagian.map((item,i)=>{
+								return <option>{item}</option>
+							})
+						}
                       </Input>
                     </FormGroup>
 					
@@ -209,8 +267,17 @@ class DailyAssessmentInput extends Component {
                         <option>-- Pilih --</option>
                         <option>Karyawan</option>
                         <option>Keluarga Karyawan</option>
-                        <option>Karyawan Baru</option>
-                        <option>Keluarga Karyawan Baru</option>
+                        <option>Calon Karyawan</option>
+                        <option>Keluarga Calon Karyawan</option>
+                      </Input>
+                    </FormGroup>
+                    
+                    <FormGroup>
+                      <Label htmlFor="location">Lokasi Karantina</Label>
+                      <Input type="select" name="location" id="location" value={this.state.location} onChange={this.handleLocationChange}>
+                        <option>-- Pilih --</option>
+                        <option>Dalam Kebun</option>
+                        <option>Luar Kebun</option>
                       </Input>
                     </FormGroup>
 					
@@ -255,7 +322,7 @@ class DailyAssessmentInput extends Component {
                       </Input>
                     </FormGroup>
                     
-                    <FormGroup>
+                    <FormGroup style={{display:this.state.displayConditionDesc}}>
                       <Label htmlFor="condition_desc">Jika sakit, keterangan</Label>
                       <Input type="textarea" name="condition_desc" id="condition_desc" rows="3"
                              placeholder="Alasan..."  value={this.state.condition_desc} onChange={this.handleConditionDescChange}/>

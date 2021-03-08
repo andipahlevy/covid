@@ -51,3 +51,9 @@
   text-overflow: ellipsis;
   -webkit-appearance: none;
 }
+.tbl-header-popup tr td, .tbl-header-popup tr th{
+	border-top:none !important;
+}
+.tbl-header-popup th{
+	width: 200px;
+}

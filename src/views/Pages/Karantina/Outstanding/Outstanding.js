@@ -4,7 +4,9 @@ import { Button, Input, Badge, Card, Container, CardBody, CardHeader, Col, Pagin
 Modal,
   ModalBody,
   ModalFooter,
-  ModalHeader } from 'reactstrap';
+  ModalHeader,
+  FormGroup,
+  Label, } from 'reactstrap';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 // import { Bar, Doughnut, Line, Pie, Polar, Radar } from 'react-chartjs-2';
@@ -21,7 +23,7 @@ import {
 	apiUri
 } from '../../../Constants';
 
-class DailyAssessmentInput extends Component {
+class Outstanding extends Component {
 	_isMounted = false;
 
 	constructor(props) {
@@ -36,7 +38,9 @@ class DailyAssessmentInput extends Component {
 			edited: 0,
 			modalo: false,
 			detail: [],
-			isLoading: false
+			isLoading: false,
+			detailName: '',
+			detailEndDate: '',
 		};
 	}
 	
@@ -47,14 +51,13 @@ class DailyAssessmentInput extends Component {
 	  }
 	  
 	viewDetail = (e,i)=>{
-		this.setState({detail: []},this.toggle())
-		
-		
+		this.setState({detail: [], detailName:'', detailEndDate:''},this.toggle())
+		let dis = this
 		fetch(apiUri+'karantina/detail.php?id='+this.state.grid[i].id)
         .then(response => response.json())
         .then(data => {
 			if(data.code==200){
-				this.setState({detail: data.contents})
+				this.setState({detail: data.contents, detailName:dis.state.grid[i].name, detailEndDate:dis.state.grid[i].end_date})
 			}
 		});
 	}
@@ -131,6 +134,14 @@ class DailyAssessmentInput extends Component {
 		});
 	}
 	
+	handleCategoryChange = (e, i )=>{
+		let st = [...this.state.grid]
+		let item = st[i]
+		item.category = e.target.value
+		st[i] = item
+		this.setState({grid: st})
+	}
+	
 	handleConditionChange = (e, i )=>{
 		let st = [...this.state.grid]
 		let item = st[i]
@@ -150,6 +161,14 @@ class DailyAssessmentInput extends Component {
 		let st = [...this.state.grid]
 		let item = st[i]
 		item.condition_desc = e.target.value
+		st[i] = item
+		this.setState({grid: st})
+	}
+	
+	handleEndDateChange = (e,i)=>{
+		let st = [...this.state.grid]
+		let item = st[i]
+		item.end_date = e.target.value
 		st[i] = item
 		this.setState({grid: st})
 	}
@@ -202,10 +221,12 @@ class DailyAssessmentInput extends Component {
                 <Table responsive>
                   <thead>
                   <tr>
-                    <th>Business Area</th>
+                    <th>Region</th>
+                    <th>Company</th>
                     <th>Bagian</th>
                     <th>Nama</th>
                     <th>Status</th>
+                    <th>Lokasi Karantina</th>
                     <th>Mulai Karantina</th>
                     <th>Selesai Karantina</th>
                     <th>Kategori Karantina</th>
@@ -220,13 +241,24 @@ class DailyAssessmentInput extends Component {
                   {
 					  this.state.grid.map((item, i)=>
 						<tr key={i}>
+							<td>{item.region}</td>
 							<td>{item.company}</td>
 							<td>{item.bagian}</td>
-							<td>{item.name}</td>
+							<td>{item.name.toUpperCase()}</td>
 							<td>{item.status}</td>
+							<td>{item.location}</td>
 							<td>{item.start_date}</td>
-							<td>{item.end_date}</td>
-							<td>{item.category}</td>
+							<td>
+								<Input type="date" value={item.end_date} min={item.start_date_formated} onChange={(event)=>this.handleEndDateChange(event, i)} placeholder="" />
+							</td>
+							<td>
+								<Input type="select" className="combo_wrap" value={item.category} onChange={(event)=>this.handleCategoryChange(event, i)}>
+									<option>Karantina Sehat</option>
+									<option>PDP</option>
+									<option>ODP</option>
+									<option>Positif Covid</option>
+								</Input>
+							</td>
 							<td>{item.reason}</td>
 							<td>
 								<Input type="date" defaultValue={item.survey_date} max={item.survey_date_max} min={item.min_start_date} onChange={(event)=>this.handleSurveyDateChange(event, i)} placeholder="" />
@@ -239,7 +271,7 @@ class DailyAssessmentInput extends Component {
 									<option>Selesai Karantina</option>
 								</Input>
 							</td>
-							<td><Input type="text"  className="combo_wrap" value={item.condition_desc} onChange={(event)=>this.handleConditionDescChange(event, i)}/></td>
+							<td><Input type="text" style={{ display: item.condition=='Sakit' ? 'block' : 'none' }} className="combo_wrap" value={item.condition_desc} onChange={(event)=>this.handleConditionDescChange(event, i)}/></td>
 							<td>
 								<Button onClick={(e)=>this.viewDetail(e,i)} color="success" className="btn-sm" active><i className="fa fa-eye"></i></Button>
 							</td>
@@ -253,6 +285,18 @@ class DailyAssessmentInput extends Component {
                             <ModalHeader toggle={this.toggle}>Info Riwayat Declare</ModalHeader>
                             <ModalBody>
 							{this.state.detail.length == 0 ? 'Please wait...' : ''}
+								
+								<Table className="tbl-header-popup">
+									<tr>
+										<th>Nama</th>
+										<td>: {this.state.detailName}</td>
+									</tr>
+									<tr>
+										<th>Tanggal Selesai Karantina</th>
+										<td>: {this.state.detailEndDate}</td>
+									</tr>
+								</Table>
+								
 								<Table responsive style={{display:this.state.detail.length==0?'none':'inline-table', width:'100%'}}>
 								  <thead>
 								  <tr>
@@ -316,4 +360,4 @@ class DailyAssessmentInput extends Component {
 	}
 }
 
-export default DailyAssessmentInput;
+export default Outstanding;
