@@ -47,6 +47,8 @@ class DailyAssessmentInput extends Component {
 		this.state = {
 			start_date		: '',
 			end_date		: '',
+			start_month		: '',
+			end_month		: '',
 		}
 	}
 
@@ -64,6 +66,14 @@ class DailyAssessmentInput extends Component {
 	
 	endDateChange = (e)=>{
 		this.setState({end_date: e.target.value});
+	}
+	
+	startMonthChange = (e)=>{
+		this.setState({start_month: e.target.value});
+	}
+	
+	endMonthChange = (e)=>{
+		this.setState({end_month: e.target.value});
 	}
 	
 	formatDate(date) {
@@ -89,7 +99,20 @@ class DailyAssessmentInput extends Component {
 	
 	downloadRB = (e)=>{
 		e.preventDefault();
-		window.location.href=apiUri+'report/daily_summary.php?start_date='+this.state.start_date+'&end_date='+this.state.end_date;
+		if(!this.state.start_date || !this.state.end_date){
+			alert('Pilih range periode terlebih dahulu');
+		}else{
+			window.location.href=apiUri+'report/daily_summary.php?start_date='+this.state.start_date+'&end_date='+this.state.end_date;	
+		}
+	}
+	
+	downloadRC = (e)=>{
+		e.preventDefault();
+		if(!this.state.start_month || !this.state.end_month){
+			alert('Pilih range periode terlebih dahulu');
+		}else{
+			window.location.href=apiUri+'report/summary.php?start_month='+this.state.start_month+'&end_month='+this.state.end_month;	
+		}
 	}
 
 	render() {
@@ -135,7 +158,15 @@ class DailyAssessmentInput extends Component {
                 <CardBody className="p-4">
                   <h5 class="card-title">Summary Report</h5>
 					<p class="card-text">Summary report </p>
-					<a href="#" class="btn btn-primary disabled">Download</a>
+					
+					<InputGroup>
+						<Input type="month" value={this.state.start_month} onChange={this.startMonthChange} />
+						<InputGroupAddon addonType="prepend"><InputGroupText>-</InputGroupText></InputGroupAddon>
+						<Input type="month" value={this.state.end_month} onChange={this.endMonthChange} />
+						<InputGroupAddon addonType="prepend">
+							<button className="btn btn-primary" onClick={this.downloadRC}>Download</button>
+						</InputGroupAddon>
+                    </InputGroup>
                 </CardBody>
               </Card>
             </Col>
