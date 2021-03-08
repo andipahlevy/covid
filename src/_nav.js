@@ -37,7 +37,7 @@ export default {
 		
 		{
 			name: 'Outstanding Karantina',
-			icon: 'icon-people',
+			icon: 'icon-flag',
 			url: '/karantina/outstanding',
 		},
 		{
@@ -109,7 +109,7 @@ export default {
 		
 		{
 			name: 'Karantina Report',
-			icon: 'icon-people',
+			icon: 'icon-calendar',
 			url: '/karantina/report',
 		},
 	],

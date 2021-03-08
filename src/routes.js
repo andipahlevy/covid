@@ -1,5 +1,6 @@
 import React from 'react';
 import DefaultLayout from './containers/DefaultLayout';
+import Iconku from './views/CoreUI/Icons/SimpleLineIcons';
 
 const Login = React.lazy(() => import('./views/Pages/Login'));
 
