@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom'
 import { Link } from 'react-router-dom';
 import { Button, Input, Badge, Card, Container, CardBody, CardHeader, Col, Pagination, PaginationItem, PaginationLink, Row, Table,
 Modal,
@@ -23,6 +24,8 @@ import {
 	apiUri
 } from '../../../Constants';
 
+import $ from "jquery"
+
 class Outstanding extends Component {
 	_isMounted = false;
 
@@ -41,6 +44,7 @@ class Outstanding extends Component {
 			isLoading: false,
 			detailName: '',
 			detailEndDate: '',
+			gridHeight: 'auto',
 		};
 	}
 	
@@ -64,6 +68,9 @@ class Outstanding extends Component {
 
 	async componentDidMount() {
 		this.fetchData()
+		console.log('ReactDOM.findDOMNode(this.refs.cobaaja)')
+		console.log(ReactDOM.findDOMNode(this.refs.cobaaja))
+		$('.table-responsive').css('height',(window.innerHeight - 200)+'px')
 	}
 	
 	fetchData = ()=>{
@@ -202,7 +209,7 @@ class Outstanding extends Component {
 		// if (this.state.isLoading) {
 			// return <p>Loading ...</p>;
 		// }
-		return (<div className="app flex-row">
+		return (<div className="app flex-row" ref="cobaaja">
 		
         <Container className="p-3">
           <Row className="justify-content-center">
