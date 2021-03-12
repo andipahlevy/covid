@@ -308,7 +308,7 @@ class DailyAssessmentInput extends Component {
                     </FormGroup>
                     
 					<FormGroup>
-						<Label htmlFor="reason">Alasan Diarantina</Label>
+						<Label htmlFor="reason">Alasan Dikarantina</Label>
 						<Input type="textarea" name="reason" id="reason" rows="3"
                              placeholder="Alasan..."  value={this.state.reason} onChange={this.handleReasonChange}/>
 					</FormGroup>

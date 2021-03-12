@@ -1,0 +1,13 @@
+pending -> vw_COVID_data_new, vw_COVID_dataganda_new
+
+change name -> sp_DailyAssessment_KasusLingkungan to sp_da_KasusLingkungan
+		sp_DailyAssessment_KasusLingkungan
+		sp_DailyAssessment_Keluhan_Lain
+		sp_DailyAssessment_Kondisi_Keluarga
+		sp_DailyAssessment_LingkunganCovid
+
+
+		
+		
+	
+
