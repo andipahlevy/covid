@@ -196,7 +196,14 @@ class Outstanding extends Component {
 			.then(response => response.json())
 			.then(data => {
 				if(data.code == 200){
-					
+					const oldState = dis.state.grid
+					const index = oldState.findIndex(p =>{
+						return p.condition === 'Selesai Karantina'
+					})
+					if(index){
+						oldState.splice(index,1)
+						dis.setState({grid: oldState});	
+					}
 				}else{
 					alert(data.messages)
 				}
