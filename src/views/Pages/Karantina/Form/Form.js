@@ -64,7 +64,7 @@ class DailyAssessmentInput extends Component {
 			isLoading	: false,
 			displayConditionDesc	: 'none',
 			pilNonHO : ['ESTATE 1','ESTATE 2','ESTATE 2','MILL','BULKING','KARET'],
-			pilHO : ['JAKARTA'],
+			pilHO : ['HEAD OFFICE'],
 			pilBagian: []
 		}
 	}
