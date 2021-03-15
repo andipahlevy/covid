@@ -4,7 +4,8 @@ import Page500 from './Page500';
 import Register from './Register';
 import Maintenance from './Maintenance';
 import Karantina from './Karantina';
+import Declaration from './Declaration';
 
 export {
-  Login, Page404, Page500, Register, Maintenance, Karantina
+  Login, Page404, Page500, Register, Maintenance, Karantina,Declaration
 };

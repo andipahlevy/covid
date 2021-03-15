@@ -24,6 +24,7 @@ const DailyAssessmentShift = React.lazy(() => import('./views/Reports/HR/DailyAs
 const DailyAssessmentTidakSehat = React.lazy(() => import('./views/Reports/HR/DailyAssessmentTidakSehat'));
 
 /*karantina*/
+const DeclarationForm = React.lazy(() => import('./views/Pages/Declaration/Form'));
 const KarantinaForm = React.lazy(() => import('./views/Pages/Karantina/Form'));
 const KarantinaOutstanding = React.lazy(() => import('./views/Pages/Karantina/Outstanding'));
 const KarantinaReport = React.lazy(() => import('./views/Pages/Karantina/Report'));
@@ -48,6 +49,7 @@ const routes = [
 	{ path: '/hr/dailyassessmentshift', exact: true, name: 'DailyAssessmentShift', component: DailyAssessmentShift },
 	{ path: '/hr/dailyassessmenttidaksehat', exact: true, name: 'DailyAssessmentTidakSehat', component: DailyAssessmentTidakSehat },
 	
+	{ path: '/declaration', name: 'declaration.form', component: DeclarationForm },
 	{ path: '/karantina/form', exact: true, name: 'karantina.form', component: KarantinaForm },
 	{ path: '/karantina/outstanding', exact: true, name: 'karantina.outstanding', component: KarantinaOutstanding },
 	{ path: '/karantina/report', exact: true, name: 'karantina.report', component: KarantinaReport },

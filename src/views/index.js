@@ -75,7 +75,8 @@ import {
   Page404,
   Page500,
   Register,
-  Maintenance
+  Maintenance,
+  Declaration
 } from './Pages';
 
 export {
@@ -153,4 +154,5 @@ export {
   Page500,
   Register,
   Maintenance,
+  Declaration,
 };
