@@ -126,7 +126,7 @@ class DailyAssessmentInput extends Component {
 	
 	handleRegionChange = (e)=>{
 		let dis = this
-		let val = e.target.value
+		let val = btoa(e.target.value)
 		this.setState({isLoading:true})
 		this.setState({region:e.target.value},()=>{
 			fetch(apiUri+'master/company.php?region='+val)

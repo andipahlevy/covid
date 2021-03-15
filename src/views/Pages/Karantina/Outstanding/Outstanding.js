@@ -40,17 +40,25 @@ class Outstanding extends Component {
 			descs: [],
 			edited: 0,
 			modalo: false,
+			modalConfirm: false,
 			detail: [],
 			isLoading: false,
 			detailName: '',
 			detailEndDate: '',
 			gridHeight: 'auto',
+			akanSelesaiKarantina: [],
 		};
 	}
 	
 	toggle = ()=> {
 		this.setState({
 		  modalo: !this.state.modalo,
+		});
+	  }
+	
+	toggle2 = ()=> {
+		this.setState({
+		  modalConfirm: !this.state.modalConfirm,
 		});
 	  }
 	  
@@ -172,6 +180,14 @@ class Outstanding extends Component {
 		this.setState({grid: st})
 	}
 	
+	handleLocationChange = (e,i)=>{
+		let st = [...this.state.grid]
+		let item = st[i]
+		item.location = e.target.value
+		st[i] = item
+		this.setState({grid: st})
+	}
+	
 	handleEndDateChange = (e,i)=>{
 		let st = [...this.state.grid]
 		let item = st[i]
@@ -182,6 +198,15 @@ class Outstanding extends Component {
 
 	componentWillUnmount() {
 		this._isMounted = false;
+	}
+	
+	beforeSave = ()=>{
+		let dis = this
+		const oldState = dis.state.grid
+		const getWill = oldState.filter(will => will.condition === 'Selesai Karantina');
+		
+		this.setState({akanSelesaiKarantina:getWill}, this.toggle2())		
+		
 	}
 	
 	save = ()=>{
@@ -200,7 +225,9 @@ class Outstanding extends Component {
 					const index = oldState.findIndex(p =>{
 						return p.condition === 'Selesai Karantina'
 					})
-					if(index){
+					console.log('indx')
+					console.log(index)
+					if(index >= 0){
 						oldState.splice(index,1)
 						dis.setState({grid: oldState});	
 					}
@@ -209,6 +236,7 @@ class Outstanding extends Component {
 				}
 				console.log(data)
 				this.setState({isLoading:false})
+				this.toggle2()
 			});
 	}
 
@@ -226,7 +254,7 @@ class Outstanding extends Component {
 				<Link to="/karantina/form">
 					<Button color="success" active><i className="fa fa-plus"></i> Tambah Data Karantina</Button>
                 </Link>
-				<Button color="primary" active onClick={this.save} className="float-right" style={{display: this.state.willUpdate.length>0?'block':'block'}}><i className="fa fa-save"></i> {this.state.isLoading?'Updating...':'Update'}</Button>
+				<Button color="primary" active onClick={this.beforeSave} className="float-right" style={{display: this.state.willUpdate.length>0?'block':'block'}}><i className="fa fa-save"></i> {this.state.isLoading?'Updating...':'Update'}</Button>
               </CardHeader>
               <CardBody>
 			  <div id="cover-spin" style={{ display: this.state.isLoading ? 'block' : 'none' }}></div>
@@ -260,7 +288,12 @@ class Outstanding extends Component {
 							<td>{item.bagian}</td>
 							<td>{item.name.toUpperCase()}</td>
 							<td>{item.status}</td>
-							<td>{item.location}</td>
+							<td>
+								<Input type="select" className="combo_wrap" value={item.location} onChange={(event)=>this.handleLocationChange(event, i)}>
+									<option>Dalam Kebun</option>
+									<option>Luar Kebun</option>
+								</Input>
+							</td>
 							<td>{item.start_date}</td>
 							<td>
 								<Input type="date" value={item.end_date} min={item.start_date_formated} onChange={(event)=>this.handleEndDateChange(event, i)} placeholder="" />
@@ -294,6 +327,43 @@ class Outstanding extends Component {
 				  }
                   </tbody>
                 </Table>
+				<Modal isOpen={this.state.modalConfirm} toggle={this.toggle2}
+                          className={'modal-success modal-lg ' + this.props.className}>
+                            <ModalHeader toggle={this.toggle2}>Konfirmasi</ModalHeader>
+                            <ModalBody>
+								<h3>Apakah anda yakin untuk memproses data?</h3>
+								<br/>
+								{ this.state.akanSelesaiKarantina.length>0 ? (<p className="text-muted">Berikut adalah data dengan status selesai karantina yang akan diproses</p>) : ''}
+								<Table responsive style={{display:this.state.akanSelesaiKarantina.length==0?'none':'inline-table', width:'100%'}}>
+								  <thead>
+								  <tr>
+									<th>Region</th>
+									<th>Company</th>
+									<th>Bagian</th>
+									<th>Nama</th>
+									<th>Status</th>
+								  </tr>
+								  </thead>
+								  <tbody>
+								  {
+									  this.state.akanSelesaiKarantina.map((item, i)=>
+										<tr key={i}>
+											<td>{item.region}</td>
+											<td>{item.company}</td>
+											<td>{item.bagian}</td>
+											<td>{item.name}</td>											
+											<td style={{ color:'green' }}>Selesai Karantina</td>											
+										</tr>
+									  )
+								  }
+								  </tbody>
+								</Table>
+                            </ModalBody>
+                            <ModalFooter>
+								<Button color="default" onClick={this.toggle2}>Tutup</Button>
+								<Button color="primary" onClick={this.save}>Proses</Button>
+                            </ModalFooter>
+                          </Modal>
 				<Modal isOpen={this.state.modalo} toggle={this.toggle}
                           className={'modal-success ' + this.props.className}>
                             <ModalHeader toggle={this.toggle}>Info Riwayat Declare</ModalHeader>

@@ -5,7 +5,8 @@ import Register from './Register';
 import Maintenance from './Maintenance';
 import Karantina from './Karantina';
 import Declaration from './Declaration';
+import Done from './Done';
 
 export {
-  Login, Page404, Page500, Register, Maintenance, Karantina,Declaration
+  Login, Page404, Page500, Register, Maintenance, Karantina,Declaration, Done
 };
