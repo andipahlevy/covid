@@ -64,7 +64,7 @@ class DailyAssessmentInput extends Component {
 			isLoading	: false,
 			displayConditionDesc	: 'none',
 			pilNonHO : ['ESTATE 1','ESTATE 2','ESTATE 2','MILL','BULKING','KARET'],
-			pilHO : ['HEAD OFFICE'],
+			pilHO : ['JAKARTA'],
 			pilBagian: []
 		}
 	}
@@ -146,7 +146,7 @@ class DailyAssessmentInput extends Component {
 		let dis = this
 		let val = e.target.value
 		this.setState({ba:e.target.value}, ()=>{
-			if(val != 'HEAD OFFICE'){
+			if(val != 'TAP'){
 				dis.setState({pilBagian:dis.state.pilNonHO})
 			}else{
 				dis.setState({pilBagian:dis.state.pilHO})
