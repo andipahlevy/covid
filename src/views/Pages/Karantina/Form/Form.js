@@ -63,7 +63,7 @@ class DailyAssessmentInput extends Component {
 			region_data		: [],
 			isLoading	: false,
 			displayConditionDesc	: 'none',
-			pilNonHO : ['ESTATE 1','ESTATE 2','ESTATE 2','MILL','BULKING','KARET'],
+			pilNonHO : ['ESTATE 1','ESTATE 2','MILL','BULKING','KARET'],
 			pilHO : ['HEAD OFFICE'],
 			pilBagian: []
 		}
