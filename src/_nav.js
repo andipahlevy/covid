@@ -48,6 +48,7 @@ export default {
 				attributes: {},
 			},
 		},
+		/*
 		{
 			name: 'HR',
 			url: '/hr',
@@ -106,7 +107,7 @@ export default {
 				},
 			],
 		},
-		
+		*/
 		{
 			name: 'Karantina Report',
 			icon: 'icon-calendar',

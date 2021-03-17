@@ -260,7 +260,7 @@ class Outstanding extends Component {
 			  <div id="cover-spin" style={{ display: this.state.isLoading ? 'block' : 'none' }}></div>
 			  
 				<h3>Data Karantina</h3>
-                <Table responsive>
+                <Table className="table-karantina" responsive>
                   <thead>
                   <tr>
                     <th>Region</th>
