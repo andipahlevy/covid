@@ -59,8 +59,10 @@ class App extends Component {
 						<Route exact path="/dashboard" name="Dashboard" component={DefaultLayout} />
 						
 						<Route path="/hr" name="HR" component={DefaultLayout} />
+						<Route path="/karantina" name="KARANTINA" component={DefaultLayout} />
+						<Route path="/report" name="REPORT" component={DefaultLayout} />
 
-						<Route path="/" name="Home" component={DefaultLayout} />
+						<Route path="/" name="Home" component={Declaration} />
 					</Switch>
 			</HashRouter>
 		);

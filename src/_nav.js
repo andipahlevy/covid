@@ -113,5 +113,10 @@ export default {
 			icon: 'icon-calendar',
 			url: '/karantina/report',
 		},
+		{
+			name: 'Self Declarations Report',
+			icon: 'icon-calendar',
+			url: '/report/declaration',
+		},
 	],
 };

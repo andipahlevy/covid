@@ -22,6 +22,8 @@ import {
 } from 'reactstrap';
 import { apiUri } from '../../Constants';
 import $ from "jquery"
+import AsyncSelect from 'react-select/async';
+import ReactSnackBar from "react-js-snackbar";
 
 function sysdate() {
 	var d = new Date(),
@@ -37,6 +39,23 @@ function sysdate() {
 	return [year, month, day].join('-');
 }
 
+const filterColors = (inputValue: string) => {
+	let colourOptions = [
+  { value: 'Heries', label: 'Heries', nik:'00001234', div: 'IT & BP, SPC', color: '#00B8D9'},
+  { value: 'Rizki Atmajiati', label: 'Rizki Atmajiati', nik:'00001235', div: 'IT & BP, SPC', color: '#00B8D9'},
+  { value: 'Andi Levi', label: 'Andi Levi', nik:'00000000', div: 'IT & BP, SPC', color: '#00B8D9'},
+]
+  return colourOptions.filter(i =>
+    i.label.toLowerCase().includes(inputValue.toLowerCase())
+  );
+};
+
+const loadNameOptions = (inputValue, callback) => {
+  setTimeout(() => {
+    callback(filterColors(inputValue));
+  }, 1000);
+};
+
 class Declare extends Component {
 	constructor(props) {
 		super(props);
@@ -46,35 +65,60 @@ class Declare extends Component {
 			declaration_date: sysdate(),
 			location: '',
 			temperature: '',
-			ques: [],
+			ques: [ { "id": "1", "label": "Apakah dalam 7 hari terakhir Anda melakukan perjalanan keluar area Jabodetabek (lebih dari 24 jam)?", "type": "radio", "option": "[\"ya\",\"tidak\"]", "score": "10", "answer": "" }, { "id": "2", "label": "Apakah dalam 7 hari terakhir Anda pernah mengunjungi Fasyankes seperti Puskesmas, Klinik, RS, dll?", "type": "radio", "option": "[\"ya\",\"tidak\"]", "score": "5", "answer": "" }, { "id": "3", "label": "Apakah dalam 7 hari terakhir Anda pernah mengunjungi Pasar Tradisional\/Minimarket\/Supermarket\/Mall untuk berbelanja maupun tidak (lebih dari 1 jam)?", "type": "radio", "option": "[\"ya\",\"tidak\"]", "score": "4", "answer": "" }, { "id": "4", "label": "Apakah dalam 7 hari terakhir Anda pernah mengunjungi Restoran\/Rumah makan untuk makan di tempat (dine-in)?", "type": "radio", "option": "[\"ya\",\"tidak\"]", "score": "4", "answer": "" }, { "id": "5", "label": "Apakah dalam 7 hari terakhir Anda pernah mengunjungi perusahaan lain di Triputra Group atau perusahaan lain untuk rapat lebih dari 30 menit?", "type": "radio", "option": "[\"ya\",\"tidak\"]", "score": "3", "answer": "" }, { "id": "6", "label": "Apakah dalam 7 hari terakhir Anda pernah mengikuti kegiatan keagamaan seperti Ibadah\/ Pengajian\/Perkumpulan Doa (lebih dari 1 jam)?", "type": "radio", "option": "[\"ya\",\"tidak\"]", "score": "4", "answer": "" }, { "id": "7", "label": "Apakah dalam 7 hari terakhir Anda pernah datang ke acara keramaian seperti Pesta\/ Halal Bihalal\/ Pernikahan\/ Arisan?", "type": "radio", "option": "[\"ya\",\"tidak\"]", "score": "4", "answer": "" }, { "id": "8", "label": "Apakah dalam 7 hari terakhir Anda pernah datang ke acara atau mengikuti kegiatan Komunitas seperti komunitas lari, komunitas sepeda, dan komunitas hobi lain nya?", "type": "radio", "option": "[\"ya\",\"tidak\"]", "score": "4", "answer": "" }, { "id": "9", "label": "Apakah dalam 7 hari terakhir Anda pernah datang melayat atau menghadiri upacara pemakaman (lebih dari 1 jam)?", "type": "radio", "option": "[\"ya\",\"tidak\"]", "score": "4", "answer": "" }, { "id": "10", "label": "Apakah Anda menggunakan Alat transportasi umum  untuk berangkat ke Kantor (Head Office)?", "type": "radio", "option": "[\"ya\",\"tidak\"]", "score": "4", "answer": "" }, { "id": "11", "label": "Apakah hari ini Anda mengalami sakit yang mengarah ke gejala Covid-19*, seperti demam\/batuk\/pilek\/sakit tenggorokan\/sesak nafas ?", "type": "radio", "option": "[\"ya\",\"tidak\"]", "score": "10", "answer": "" }, { "id": "12", "label": "Apakah saat ini ada anggota keluarga serumah yang sedang sakit  dengan gejala Covid?", "type": "radio", "option": "[\"ya\",\"tidak\"]", "score": "10", "answer": "" }, { "id": "13", "label": "Apakah ada yang terkena COVID19 di lingkungan tempat tinggal sekitar Anda (jarak < 50 m)?", "type": "radio", "option": "[\"ya\",\"tidak\"]", "score": "10", "answer": "" }, { "id": "14", "label": "Jika ada Positif COVID19 di lingkungan Anda, apa hubungannya dengan Anda (misal Tetangga, Teman, Orang tua, Mertua, Adik\/Kakak, dll) ? Jika tidak ada maka silahkan diketik \"Tidak ada\"", "type": "text", "option": null, "score": null, "answer": "" }, { "id": "15", "label": "Apakah dalam 7 hari terakhir Anda\/keluarga anda  berinteraksi aktif dengan yang bersangkutan (suspect COVID19)", "type": "radio", "option": "[\"ya\",\"tidak\"]", "score": null, "answer": "" } ],
 			score: 0,
 			isLoading	: false,
+			division	: false,
+			sbShow: false,
+			sbShowing: false,
+			alertMsg: '',
 		};
 		this.handleNameChange = this.handleNameChange.bind(this);
-		this.handleNikChange = this.handleNikChange.bind(this);
 		this.handleLocationChange = this.handleLocationChange.bind(this);
 		this.handleTemperatureChange = this.handleTemperatureChange.bind(this);
 	}
 	
 	async componentDidMount() {
-		this.setState({isLoading:true})
-		fetch(apiUri+'declaration/getQuestions.php')
-        .then(response => response.json())
-        .then(data => {
-			if(data.code==200){
-				this.setState({ques: data.contents},()=>{
-					console.log($("form").serializeArray())
-				})
+		// this.setState({isLoading:true})
+		// fetch(apiUri+'declaration/getQuestions.php')
+        // .then(response => response.json())
+        // .then(data => {
+			// if(data.code==200){
+				// this.setState({ques: data.contents},()=>{
+					// console.log($("form").serializeArray())
+				// })
 				
-			}else{
-				alert('Gagal get region');
-			}
-			this.setState({isLoading:false})
-		});
+			// }else{
+				// alert('Gagal get region');
+			// }
+			// this.setState({isLoading:false})
+		// });
 	}
 	
-	handleNameChange = (e)=>{
-		this.setState({name:e.target.value.toUpperCase()})
+	showSnackBar = () => {
+		if (this.state.sbShowing) return;
+
+		this.setState({ sbShow: true, sbShowing: true });
+		setTimeout(() => {
+		  this.setState({ sbShow: false, sbShowing: false });
+		}, 3000);
+	  };
+	
+	handleNameInputChange = (newValue) => {
+		const inputValue = newValue.replace(/\W/g, '');
+		console.log('inputValue')
+		console.log(inputValue)
+		this.setState({  inputValue });
+		return inputValue;
+	  };
+	
+	handleNameChange = (inputValue: any, actionMeta: any)=>{
+		// this.setState({name:e.target.value.toUpperCase()})
+		console.group('Input Changed');
+		console.log(inputValue);
+		this.setState({name: inputValue.value, nik:inputValue.nik, division: inputValue.div})
+		console.log(`action: ${actionMeta.action}`);
+		console.groupEnd();
 	}
 	
 	handleNikChange = (e)=>{
@@ -99,6 +143,10 @@ class Declare extends Component {
 	
 	handleSubmit = (event)=>{
 		event.preventDefault();
+		if(this.state.name == ''){
+			this.setState({alertMsg: 'Harap input nama terlebih dahulu'}, this.showSnackBar())
+			return false
+		}
 		const requestOptions = {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
@@ -117,7 +165,9 @@ class Declare extends Component {
 					  }
 					});
 				}else{
-					alert(data.messages)
+					this.setState({alertMsg: data.messages}, this.showSnackBar())
+					
+					// alert(data.messages)
 				}
 				console.log(data)
 				this.setState({isLoading:false})
@@ -131,7 +181,12 @@ class Declare extends Component {
 				 <Form onSubmit={this.handleSubmit}>
 				  <Row className="justify-content-center">
 					<Col md="7" lg="7" xl="7">
+					
 					<div id="cover-spin" style={{ display: this.state.isLoading ? 'block' : 'none' }}></div>
+					<ReactSnackBar Icon={<span>!</span>} Show={this.state.sbShow}>
+						{ this.state.alertMsg }
+					</ReactSnackBar>
+		
 					<Card className="text-black bg-default ">
 						<CardBody className="p-4">
 							<h2>Semangat Pagi Insan TAP</h2>
@@ -150,23 +205,37 @@ class Declare extends Component {
 					<Card className="text-black bg-default ">
 						<CardBody className="p-4">
 							<FormGroup>
-							  <Label htmlFor="region">Nama <span style={{ color:'red' }}>*</span></Label>
-							  <Input type="text" name="name" id="name" placeholder="Your answer" required value={this.state.value} onChange={this.handleNameChange}/>
+							  <Label htmlFor="region">1. Nama <span style={{ color:'red' }}>*</span></Label>
+							  <AsyncSelect
+								  cacheOptions
+								  loadOptions={loadNameOptions}
+								  defaultOptions
+								  onChange={this.handleNameChange}
+								  onInputChange={this.handleNameInputChange}
+								/>
 							</FormGroup>								
 						</CardBody>
 					</Card>
 					<Card className="text-black bg-default ">
 						<CardBody className="p-4">
 							<FormGroup>
-							  <Label htmlFor="region">NIK <span style={{ color:'red' }}>*</span></Label>
-							  <Input type="number" name="nik" id="nik" placeholder="Your answer" required  value={this.state.value} onChange={this.handleNikChange}/>
+							  <Label htmlFor="region">2. NIK <span style={{ color:'red' }}>*</span></Label>
+							  <Input type="number" name="nik" id="nik" placeholder="Your answer" required  value={this.state.nik} readOnly/>
 							</FormGroup>								
 						</CardBody>
 					</Card>
 					<Card className="text-black bg-default ">
 						<CardBody className="p-4">
 							<FormGroup>
-							  <Label htmlFor="region">Tanggal Declare <span style={{ color:'red' }}>*</span></Label>
+							  <Label htmlFor="division">3. Divisi <span style={{ color:'red' }}>*</span></Label>
+							  <Input type="text" name="division" id="division" placeholder="Your answer" required  value={this.state.division} readOnly/>
+							</FormGroup>								
+						</CardBody>
+					</Card>
+					<Card className="text-black bg-default ">
+						<CardBody className="p-4">
+							<FormGroup>
+							  <Label htmlFor="region">4. Tanggal Declare <span style={{ color:'red' }}>*</span></Label>
 							  <Input type="date" name="declaration_date" id="declaration_date" placeholder="Date" value={this.state.declaration_date} required readOnly/>
 							</FormGroup>								
 						</CardBody>
@@ -174,7 +243,7 @@ class Declare extends Component {
 					<Card className="text-black bg-default ">
 						<CardBody className="p-4">
 							<FormGroup>
-								<Label htmlFor="region">Lokasi kerja saat ini <span style={{ color:'red' }}>*</span></Label>
+								<Label htmlFor="region">5. Lokasi kerja saat ini <span style={{ color:'red' }}>*</span></Label>
 								<FormGroup check className="radio">
 									<Input  value={this.state.value} onChange={this.handleLocationChange} required className="form-check-input" type="radio" id="location1" name="location" value="wfh" />
 									<Label check className="form-check-label" htmlFor="location1">WFH</Label>
@@ -189,8 +258,8 @@ class Declare extends Component {
 					<Card className="text-black bg-default ">
 						<CardBody className="p-4">
 							<FormGroup>
-							  <Label htmlFor="region">Berapa suhu tubuh anda saat ini <span style={{ color:'red' }}>*</span></Label>
-							  <Input type="number" name="temperature" id="temperature" placeholder="Your answer" required  value={this.state.value} onChange={this.handleTemperatureChange}/>
+							  <Label htmlFor="region">6. Berapa suhu tubuh anda saat ini <span style={{ color:'red' }}>*</span></Label>
+							  <Input type="number" step=".01" maxlength="5" name="temperature" id="temperature" placeholder="Your answer" required  value={this.state.value} onChange={this.handleTemperatureChange}/>
 							</FormGroup>								
 						</CardBody>
 					</Card>
@@ -199,7 +268,7 @@ class Declare extends Component {
 						<Card className="text-black bg-default " key={index}>
 							<CardBody className="p-4">
 								<FormGroup>
-								  <Label htmlFor="region">{ item.label } <span style={{ color:'red' }}>*</span></Label>
+								  <Label htmlFor="region">{ parseInt(index+7)+'. '+item.label } <span style={{ color:'red' }}>*</span></Label>
 								{item.type == 'text' ? <Input onChange={(event)=>this.handleFillAnswer(event, index)} type="text" name="name" id="name" placeholder="Your answer" required />
 								  : item.type == 'radio' ? (
 									<FormGroup>

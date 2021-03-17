@@ -48,10 +48,14 @@ class Done extends Component {
 	
 
 	render() {
-			let msg
+			let msg, msgColor
 			if(this.props.location.state){
 				if(this.props.location.state.score >= 9){
 					msg = `Dari hasil self declare anda, saudara ${this.props.location.state.name} harus dikarantina`
+					msgColor = 'red'
+				}else{
+					msg = `Dari hasil self declare anda, saudara ${this.props.location.state.name} diizinkan untuk WFO`
+					msgColor = 'green'
 				}
 			}
 			
@@ -68,7 +72,7 @@ class Done extends Component {
 								<br/>
 								<p>
 								Terima kasih sudah mengisi Self Declaration ini <br/>
-								<span style={{ color:'red', fontWeight:'500' }}>{msg}</span> <br/>
+								<span style={{ color:msgColor, fontWeight:'500' }}>{msg}</span> <br/>
 								#staysafe <br/>
 								#stayhealthy <br/>
 								#bersamakitabisamelawancovid-19 <br/>
