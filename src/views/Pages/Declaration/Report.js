@@ -81,7 +81,7 @@ class DailyAssessmentInput extends Component {
 	
 	downloadRA = (e)=>{
 		e.preventDefault();
-		window.location.href=apiUri+'report/selfDeclare.php';
+		window.location.href=apiUri+'report/declaration_daily.php?date='+this.state.date;
 	}
 	
 	render() {
