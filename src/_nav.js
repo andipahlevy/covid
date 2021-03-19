@@ -38,7 +38,7 @@ export default {
 		{
 			name: 'Outstanding Karantina',
 			icon: 'icon-flag',
-			url: '/karantina/outstanding',
+			url: '/karantina',
 		},
 		{
 			title: true,
