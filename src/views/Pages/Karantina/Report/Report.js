@@ -35,6 +35,7 @@ import {
 import {
 	apiUri
 } from '../../../Constants';
+import ReactSnackBar from "react-js-snackbar";
 
 class DailyAssessmentInput extends Component {
 	_isMounted = false;
@@ -49,12 +50,24 @@ class DailyAssessmentInput extends Component {
 			end_date		: '',
 			start_month		: '',
 			end_month		: '',
+			sbShow: false,
+			sbShowing: false,
+			alertMsg: '',
 		}
 	}
 
 	async componentDidMount() {
 		
 	}
+	
+	showSnackBar = () => {
+		if (this.state.sbShowing) return;
+
+		this.setState({ sbShow: true, sbShowing: true });
+		setTimeout(() => {
+		  this.setState({ sbShow: false, sbShowing: false });
+		}, 3000);
+	  };
 
 	componentWillUnmount() {
 		this._isMounted = false;
@@ -100,7 +113,7 @@ class DailyAssessmentInput extends Component {
 	downloadRB = (e)=>{
 		e.preventDefault();
 		if(!this.state.start_date || !this.state.end_date){
-			alert('Pilih range periode terlebih dahulu');
+			this.setState({alertMsg: 'Pilih range periode terlebih dahulu'}, this.showSnackBar())
 		}else{
 			window.location.href=apiUri+'report/daily_summary.php?start_date='+this.state.start_date+'&end_date='+this.state.end_date;	
 		}
@@ -109,7 +122,7 @@ class DailyAssessmentInput extends Component {
 	downloadRC = (e)=>{
 		e.preventDefault();
 		if(!this.state.start_month || !this.state.end_month){
-			alert('Pilih range periode terlebih dahulu');
+			this.setState({alertMsg: 'Pilih range periode terlebih dahulu'}, this.showSnackBar())
 		}else{
 			window.location.href=apiUri+'report/summary.php?start_month='+this.state.start_month+'&end_month='+this.state.end_month;	
 		}
@@ -120,6 +133,9 @@ class DailyAssessmentInput extends Component {
 
 		return (<div className="app flex-row">
         <Container className="p-3">
+			<ReactSnackBar Icon={<span>!</span>} Show={this.state.sbShow}>
+						{ this.state.alertMsg }
+					</ReactSnackBar>
           <Row className="justify-content-left">
             <Col md="12" lg="12" xl="12">
               <h3>Karantina Report</h3>

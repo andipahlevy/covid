@@ -35,6 +35,7 @@ import {
 import {
 	apiUri
 } from '../../Constants';
+import ReactSnackBar from "react-js-snackbar";
 
 class DailyAssessmentInput extends Component {
 	_isMounted = false;
@@ -46,6 +47,9 @@ class DailyAssessmentInput extends Component {
 		}
 		this.state = {
 			date		: '',
+			sbShow: false,
+			sbShowing: false,
+			alertMsg: '',
 		}
 	}
 
@@ -78,10 +82,22 @@ class DailyAssessmentInput extends Component {
 	}
 	
 	
+	showSnackBar = () => {
+		if (this.state.sbShowing) return;
+
+		this.setState({ sbShow: true, sbShowing: true });
+		setTimeout(() => {
+		  this.setState({ sbShow: false, sbShowing: false });
+		}, 3000);
+	  };
 	
 	downloadRA = (e)=>{
 		e.preventDefault();
-		window.location.href=apiUri+'report/declaration_daily.php?date='+this.state.date;
+		if(!this.state.date){
+			this.setState({alertMsg: 'Pilih tanggal terlebih dahulu'}, this.showSnackBar())
+		}else{
+			window.location.href=apiUri+'report/declaration_daily.php?date='+this.state.date;	
+		}
 	}
 	
 	render() {
@@ -98,6 +114,9 @@ class DailyAssessmentInput extends Component {
             <Col md="8" lg="8" xl="8">
               <Card className="text-black bg-default ">
                 <CardBody className="p-4">
+					<ReactSnackBar Icon={<span>!</span>} Show={this.state.sbShow}>
+						{ this.state.alertMsg }
+					</ReactSnackBar>
                   <h5 class="card-title">Daily Report</h5>
 					<p class="card-text">Download</p>
 					

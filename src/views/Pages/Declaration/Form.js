@@ -198,10 +198,13 @@ class Declare extends Component {
 					});
 				}else{
 					this.setState({alertMsg: data.messages}, this.showSnackBar())
-					
-					// alert(data.messages)
 				}
 				console.log(data)
+				this.setState({isLoading:false})
+			})
+			.catch((error) => {
+				console.log(error)
+				this.setState({alertMsg: 'Gagal simpan. Mohon cek koneksi anda'}, this.showSnackBar())
 				this.setState({isLoading:false})
 			});
 	}

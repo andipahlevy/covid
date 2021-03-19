@@ -63,7 +63,7 @@ class DailyAssessmentInput extends Component {
 			region_data		: [],
 			isLoading	: false,
 			displayConditionDesc	: 'none',
-			pilNonHO : ['ESTATE 1','ESTATE 2','MILL','BULKING','KARET'],
+			pilNonHO : ['ESTATE 1','ESTATE 2','ESTATE 3','MILL','BULKING','KARET'],
 			pilHO : ['HEAD OFFICE'],
 			pilBagian: []
 		}
@@ -197,7 +197,7 @@ class DailyAssessmentInput extends Component {
 			.then(response => response.json())
 			.then(data => {
 				if(data.code == 200){
-					this.props.history.push('/karantina/outstanding');
+					this.props.history.push('/karantina');
 				}else{
 					alert(data.messages)
 				}
