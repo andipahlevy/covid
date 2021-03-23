@@ -7,7 +7,7 @@
 # testing
 /coverage
 /src/views/Reports/Sandboxes
-
+/src/views/Constants
 # production
 /build
 /prod

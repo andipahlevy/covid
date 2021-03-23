@@ -25,6 +25,7 @@ import {
 } from '../../../Constants';
 
 import $ from "jquery"
+$.DataTable = require('datatables.net');
 
 class Outstanding extends Component {
 	_isMounted = false;
@@ -79,6 +80,40 @@ class Outstanding extends Component {
 		console.log('ReactDOM.findDOMNode(this.refs.cobaaja)')
 		console.log(ReactDOM.findDOMNode(this.refs.cobaaja))
 		$('.table-responsive').css('height',(window.innerHeight - 200)+'px')
+		
+		// const script = document.createElement("link");
+		// script.href = "assets/css/jquery.dataTables.min.css";
+		// script.rel = "stylesheet";
+		// document.body.appendChild(script);
+	}
+	
+	render_datatables(){
+		let table =  $('.table-karantina').DataTable({
+							fixedHeader: true,
+							"lengthChange": false,
+							"paging":   false,
+							"ordering": false,
+							"info":     false
+						});
+		$('.table-karantina thead tr').clone(true).appendTo( '.table-karantina thead' );
+		$('.table-karantina thead tr:eq(1) th').each( function (i) {
+			var title = $(this).text();
+			if(title =="Company" || title =="Bagian"){
+				$(this).html( '<input type="text" class ="form-control tfsearch" placeholder="Search" />' );
+		
+				$( 'input', this ).on( 'click change', function (event) {
+						if ( table.column(i).search() !== this.value ) {
+							table
+								.column(i)
+								.search( this.value )
+								.draw();
+						}
+				} );
+			}
+			else{
+				$(this).html( '<div style="width: auto;"></div>' );
+			}
+		} );
 	}
 	
 	fetchData = ()=>{
@@ -87,8 +122,15 @@ class Outstanding extends Component {
         .then(response => response.json())
         .then(data => {
 			if(data.code==200){
-				this.setState({grid: data.contents})
+				this.setState({grid: data.contents},function(){
+					this.render_datatables()
+				})
 			}
+			this.setState({isLoading:false})
+		})
+		.catch((error) => {
+			console.log(error)
+			alert('Gagal mengambil data. Mohon cek koneksi anda atau tunggu beberapa saat')
 			this.setState({isLoading:false})
 		});
 	}
@@ -237,6 +279,11 @@ class Outstanding extends Component {
 				console.log(data)
 				this.setState({isLoading:false})
 				this.toggle2()
+			})
+			.catch((error) => {
+				console.log(error)
+				alert('Gagal menyimpan. Mohon cek koneksi anda atau tunggu beberapa saat')
+				this.setState({isLoading:false})
 			});
 	}
 
@@ -260,7 +307,7 @@ class Outstanding extends Component {
 			  <div id="cover-spin" style={{ display: this.state.isLoading ? 'block' : 'none' }}></div>
 			  
 				<h3>Data Karantina</h3>
-                <Table className="table-karantina" responsive>
+                <Table className="table-karantina text-nowrap" responsive>
                   <thead>
                   <tr>
                     <th>Region</th>

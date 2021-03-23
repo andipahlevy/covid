@@ -6,7 +6,8 @@ import Maintenance from './Maintenance';
 import Karantina from './Karantina';
 import Declaration from './Declaration';
 import Done from './Done';
+import Employee from './Employee';
 
 export {
-  Login, Page404, Page500, Register, Maintenance, Karantina,Declaration, Done
+  Login, Page404, Page500, Register, Maintenance, Karantina,Declaration, Done, Employee
 };

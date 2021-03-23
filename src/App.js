@@ -61,6 +61,7 @@ class App extends Component {
 						<Route path="/hr" name="HR" component={DefaultLayout} />
 						<Route path="/karantina" name="KARANTINA" component={DefaultLayout} />
 						<Route path="/report" name="REPORT" component={DefaultLayout} />
+						<Route path="/employee" name="EMPLOYEE" component={DefaultLayout} />
 
 						<Route path="/" name="Home" component={Declaration} />
 					</Switch>

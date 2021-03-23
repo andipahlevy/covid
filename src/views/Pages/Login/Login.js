@@ -96,9 +96,9 @@ class Login extends Component {
 
 		const { nik, password } = this.state;
 		
-		if(nik=='admin' && password =='admin123'){
+		if(nik=='user_hr' && password =='user#hr123'){
 				localStorage.setItem('login', true);
-				this.props.history.push('/karantina/outstanding');
+				this.props.history.push('/employee/grid');
 				return false
 			}else{
 				let loginerr = ['Username dan Password tidak cocok'];

@@ -212,7 +212,7 @@ class Declare extends Component {
 	render() {
 			return (
 				<div className="app flex-row">
-				<Container className="p-5">
+				<Container className="p-3">
 				 <Form onSubmit={this.handleSubmit}>
 				  <Row className="justify-content-center">
 					<Col md="7" lg="7" xl="7">

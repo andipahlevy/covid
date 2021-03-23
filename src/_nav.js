@@ -28,7 +28,7 @@ export default {
 		// },
 		{
 			title: true,
-			name: 'Karantina',
+			name: 'Menu Utama',
 			wrapper: {
 				element: '',
 				attributes: {},
@@ -39,6 +39,12 @@ export default {
 			name: 'Outstanding Karantina',
 			icon: 'icon-flag',
 			url: '/karantina',
+		},
+		
+		{
+			name: 'Data Master Pegawai',
+			icon: 'icon-user',
+			url: '/employee/grid',
 		},
 		{
 			title: true,

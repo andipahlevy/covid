@@ -43,7 +43,7 @@ class DailyAssessmentInput extends Component {
 	constructor(props) {
 		super(props);
 		if(!localStorage.getItem('login')){
-			// this.props.history.push('/login');
+			this.props.history.push('/login');
 		}
 		this.state = {
 			date		: '',

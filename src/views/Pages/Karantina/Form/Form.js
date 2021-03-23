@@ -80,6 +80,11 @@ class DailyAssessmentInput extends Component {
 				alert('Gagal get region');
 			}
 			this.setState({isLoading:false})
+		})
+		.catch((error) => {
+			console.log(error)
+			alert('Gagal mengambil data. Mohon cek koneksi anda atau tunggu beberapa saat')
+			this.setState({isLoading:false})
 		});
 	}
 
@@ -138,6 +143,11 @@ class DailyAssessmentInput extends Component {
 						alert('Gagal get company');
 					}
 					this.setState({isLoading:false})
+				})
+				.catch((error) => {
+					console.log(error)
+					alert('Gagal mengambil data company. Mohon cek koneksi anda atau tunggu beberapa saat')
+					this.setState({isLoading:false})
 				});
 		})
 	}	
@@ -186,7 +196,9 @@ class DailyAssessmentInput extends Component {
 		this.setState({condition_desc:e.target.value})
 	}
 	
-	save = ()=>{
+	handleSubmit = (event)=>{
+		
+		event.preventDefault();
 		const requestOptions = {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
@@ -202,6 +214,11 @@ class DailyAssessmentInput extends Component {
 					alert(data.messages)
 				}
 				console.log(data)
+				this.setState({isLoading:false})
+			})
+			.catch((error) => {
+				console.log(error)
+				alert('Gagal menyimpan. Mohon periksa kembali form inputan')
 				this.setState({isLoading:false})
 			});
 	}
