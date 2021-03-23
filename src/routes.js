@@ -58,7 +58,7 @@ const routes = [
 	{ path: '/done', name: 'declaration.done', component: DeclarationDone },
 	{ path: '/karantina/form', exact: true, name: 'karantina.form', component: KarantinaForm },
 	{ path: '/karantina', exact: true, name: 'karantina.outstanding', component: KarantinaOutstanding },
-	{ path: '/karantina/report', exact: true, name: 'karantina.report', component: KarantinaReport },
+	{ path: '/report/karantina', exact: true, name: 'karantina.report', component: KarantinaReport },
 	{ path: '/employee/grid', exact: true, name: 'employee.grid', component: EmployeeGrid },
 	{ path: '/employee/form', exact: true, name: 'employee.form', component: EmployeeForm },
 

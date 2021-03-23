@@ -21,7 +21,7 @@ class DefaultHeader extends Component {
 	}
 	logout = ()=>{
 		localStorage.removeItem('login');
-		window.location.href='/';
+		window.location.href='/#/login';
 	}
 	render() {
 
