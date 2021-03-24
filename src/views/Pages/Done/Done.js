@@ -28,8 +28,9 @@ class Done extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			nama: '',
-			nilai: 0,
+			kuy: false,
+			name: '',
+			score: 0,
 			isLoading	: false,
 		};
 	}
@@ -39,22 +40,30 @@ class Done extends Component {
 		console.log(this.props.location.state)
 		let nm;
 		let sc;
-		if(this.props.location.state){
-			// this.setState({nama:this.props.location.state.name, nilai: this.props.location.state.score})
+		console.log('this.props.location.state')
+		// console.log(this.props.location.state)
+		// console.log(typeof(this.props.location.state))
+		if( typeof(this.props.location.state) !== 'undefined'){
+			localStorage.setItem('done.name', this.props.location.state.name);
+			localStorage.setItem('done.score', this.props.location.state.score);
+			this.setState({name:this.props.location.state.name, score: this.props.location.state.score, kuy: true})
 		}
-		
+		else{
+			this.setState({name:localStorage.getItem('done.name'), score: localStorage.getItem('done.score'), kuy: true})
+			
+		}
 	}
 	
 	
 
 	render() {
 			let msg, msgColor
-			if(this.props.location.state){
-				if(this.props.location.state.score >= 9){
-					msg = `Dari hasil self declare anda, saudara ${this.props.location.state.name} harus dikarantina`
+			if(this.state.name != ''){
+				if(this.state.score >= 9){
+					msg = `Dari hasil self declare anda, saudara ${this.state.name} harus dikarantina`
 					msgColor = 'red'
 				}else{
-					msg = `Dari hasil self declare anda, saudara ${this.props.location.state.name} diizinkan untuk WFO`
+					msg = `Dari hasil self declare anda, saudara ${this.state.name} diizinkan untuk WFO`
 					msgColor = 'green'
 				}
 			}
