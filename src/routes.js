@@ -4,7 +4,8 @@ import Iconku from './views/CoreUI/Icons/SimpleLineIcons';
 
 const Login = React.lazy(() => import('./views/Pages/Login'));
 
-const Dashboard = React.lazy(() => import('./views/Dashboard'));
+const xDashboard = React.lazy(() => import('./views/Dashboard'));
+const Dashboard = React.lazy(() => import('./views/Dashboard/New.js'));
 
 const Maintenance = React.lazy(() => import('./views/Pages/Maintenance'));
 

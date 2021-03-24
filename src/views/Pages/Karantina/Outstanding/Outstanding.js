@@ -88,12 +88,21 @@ class Outstanding extends Component {
 	}
 	
 	render_datatables(){
+		let dis = this
 		let table =  $('.table-karantina').DataTable({
 							fixedHeader: true,
 							"lengthChange": false,
 							"paging":   false,
 							"ordering": false,
-							"info":     false
+							"info":     false,
+							"columnDefs": [
+								{
+									"render": function ( data, type, row ) {
+										return dis.nowrapCustom(data)
+									},
+									"targets": [0,1,2,3]
+								},
+							]
 						});
 		$('.table-karantina thead tr').clone(true).appendTo( '.table-karantina thead' );
 		$('.table-karantina thead tr:eq(1) th').each( function (i) {
@@ -285,6 +294,21 @@ class Outstanding extends Component {
 				alert('Gagal menyimpan. Mohon cek koneksi anda atau tunggu beberapa saat')
 				this.setState({isLoading:false})
 			});
+	}
+	
+	nowrapCustom = (nama)=>{
+		let spl = nama.split(' ')
+		let final = '';
+		spl.map((v,k)=>{
+			if(k==2){
+				final += '<br/>';
+			}
+			if(k>0){
+				final += ' ';
+			}
+			final += v
+		})
+		return final
 	}
 
 	render() {
