@@ -42,11 +42,6 @@ export default {
 		},
 		
 		{
-			name: 'Data Master Pegawai',
-			icon: 'icon-user',
-			url: '/employee/grid',
-		},
-		{
 			title: true,
 			name: 'Available Reports',
 			wrapper: {
@@ -118,6 +113,11 @@ export default {
 			name: 'Karantina Report',
 			icon: 'icon-calendar',
 			url: '/report/karantina',
+		},
+		{
+			name: 'Data Master Pegawai',
+			icon: 'icon-user',
+			url: '/employee/grid',
 		},
 		{
 			name: 'Self Declarations Report',

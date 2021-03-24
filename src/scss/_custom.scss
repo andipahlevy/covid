@@ -123,16 +123,44 @@ div#DataTables_Table_0_filter {
     z-index: 1;
 }
 
+.table-karantina thead tr th:nth-child(2) {
+    background-color: #fff;
+    left: 156px;
+    position: -webkit-sticky;
+    position: sticky;
+    z-index: 3;
+}
+.table-karantina thead tr th:nth-child(3) {
+    background-color: #fff;
+    left: 373px;
+    position: -webkit-sticky;
+    position: sticky;
+    z-index: 3;
+}
 .table-karantina thead tr th:nth-child(4) {
     background-color: #fff;
-    left: 150px;
+    left: 477px;
     position: -webkit-sticky;
     position: sticky;
     z-index: 3;
 }
 
+.table-karantina tbody tr td:nth-child(2) {
+    left: 156px;
+    position: -webkit-sticky;
+    position: sticky;
+    z-index: 1;
+}
+
+.table-karantina tbody tr td:nth-child(3) {
+    left: 373px;
+    position: -webkit-sticky;
+    position: sticky;
+    z-index: 1;
+}
+
 .table-karantina tbody tr td:nth-child(4) {
-    left: 150px;
+    left: 477px;
     position: -webkit-sticky;
     position: sticky;
     z-index: 1;

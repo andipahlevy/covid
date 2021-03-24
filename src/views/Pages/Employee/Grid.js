@@ -199,11 +199,33 @@ class Employee extends Component {
 		}
 		this.setState({division: this.state.grid[i].div, name:this.state.grid[i].label, nik:this.state.grid[i].nik},this.toggle())
 	}
+	
+	delete = (e,i)=>{
+		let dis = this
+		let del = window.confirm('Apakah anda akan menghapus data karyawan dengan nik '+this.state.grid[i].nik+' ?')
+		if(del){
+			this.setState({isLoading:true})
+			fetch(apiUri+'employee/delete.php?nik='+this.state.grid[i].nik)
+			.then(response => response.json())
+			.then(data => {
+				if(data.code==200){
+					$('#trid-'+i).remove()
+					alert('Berhasil menghapus data');	
+				}else{
+					alert('Proses hapus gagal');
+				}
+				this.setState({isLoading:false})
+			})
+			.catch((error) => {
+				console.log(error)
+				alert('Gagal memproses data')
+				this.setState({isLoading:false})
+			});	
+		}
+		
+	}
 
 	render() {
-		// if (this.state.isLoading) {
-			// return <p>Loading ...</p>;
-		// }
 		return (<div className="app flex-row" ref="cobaaja">
 		
         <Container className="p-3">
@@ -232,13 +254,14 @@ class Employee extends Component {
                   <tbody>
                   {
 					  this.state.grid.map((item, i)=>
-						<tr key={i}>
+						<tr key={i} {...{ "id": "trid-"+i }}>
 							<td>{item.nik}</td>
 							<td>{item.label}</td>
 							<td>{item.location}</td>
 							<td>{item.div}</td>
 							<td>
 								<Button onClick={(e)=>this.modify(e,i)} color="success" className="btn-sm" active title="Edit"><i className="fa fa-edit"></i></Button>
+								<Button style={{ marginLeft:'5px' }} onClick={(e)=>this.delete(e,i)} color="danger" className="btn-sm" active title="Hapus"><i className="fa fa-trash"></i></Button>
 							</td>
 						</tr>
 					  )
@@ -291,7 +314,7 @@ class Employee extends Component {
 						  </Form>
 					</ModalBody>
 					<ModalFooter>
-					  <Button color="warning" onClick={this.toggle}>Close</Button>
+					  <Button color="warning" onClick={this.toggle}>Tutup</Button>
 					</ModalFooter>
 				  </Modal>
 						  
