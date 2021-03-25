@@ -224,11 +224,21 @@ class Declare extends Component {
 		
 					<Card className="text-black bg-default ">
 						<CardBody className="p-4">
-							<div className="row">
-								<div className="col-md-9">
+							<div className="row d-block d-sm-none">
+								<div className="col-xs-12 col-sm-12" style={{ textAlign: 'center' }}>
+									<img width="50px" src="/assets/img/logo.png" alt="" className="image"/>
+								</div>
+								<div className="col-xs-12 col-sm-12 text-center">
 									<h1 style={{marginTop: '10px'}}>PT. Triputra Agro Persada Tbk</h1>
 								</div>
-								<div className="col-md-3" style={{ textAlign: 'right' }}><img width="50px" src="/assets/img/logo.png" alt="" className="image"/></div>
+							</div>
+							<div className="row d-none d-sm-block">
+								<div className="row row p-3">
+									<div className="col-md-9">
+										<h1 style={{marginTop: '10px'}}>PT. Triputra Agro Persada Tbk</h1>
+									</div>
+									<div className="col-md-3" style={{ textAlign: 'right' }}><img width="50px" src="/assets/img/logo.png" alt="" className="image"/></div>
+								</div>
 							</div>
 							<h2 style={{ color:'#5c6873' }}>Semangat Pagi Insan TAP</h2>
 							<h4 style={{ color:'#5c6873' }}>Self Declaration</h4>
