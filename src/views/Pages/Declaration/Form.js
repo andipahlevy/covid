@@ -224,7 +224,14 @@ class Declare extends Component {
 		
 					<Card className="text-black bg-default ">
 						<CardBody className="p-4">
-							<h2>Semangat Pagi Insan TAP</h2>
+							<div className="row">
+								<div className="col-md-9">
+									<h1 style={{marginTop: '10px'}}>PT. Triputra Agro Persada Tbk</h1>
+								</div>
+								<div className="col-md-3" style={{ textAlign: 'right' }}><img width="50px" src="/assets/img/logo.png" alt="" className="image"/></div>
+							</div>
+							<h2 style={{ color:'#5c6873' }}>Semangat Pagi Insan TAP</h2>
+							<h4 style={{ color:'#5c6873' }}>Self Declaration</h4>
 							<br/>
 							<p className="text-muted">Di tengah merebaknya virus COVID19 (Novel Coronavirus), maka manajemen perlu mengetahui lebih lanjut kondisi dari setiap karyawan HO (Head Office) yang memiliki keluhan ataupun masalah kesehatan pada hari ini atau dalam 1 minggu terakhir ini.
 		Langkah ini dilakukan sebagai  wujud kepedulian serta tindakan pencegahan dan solusi agar seluruh karyawan TAP Group selalu dalam keadaan sehat dan tetap dapat beraktivitas seperti biasa.</p>

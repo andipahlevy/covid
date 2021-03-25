@@ -36,37 +36,13 @@ class Done extends Component {
 	}
 	
 	async componentDidMount() {
-		console.log('this.props.location.state')
-		console.log(this.props.location.state)
-		let nm;
-		let sc;
-		console.log('this.props.location.state')
-		// console.log(this.props.location.state)
-		// console.log(typeof(this.props.location.state))
-		if( typeof(this.props.location.state) !== 'undefined'){
-			localStorage.setItem('done.name', this.props.location.state.name);
-			localStorage.setItem('done.score', this.props.location.state.score);
-			this.setState({name:this.props.location.state.name, score: this.props.location.state.score, kuy: true})
-		}
-		else{
-			this.setState({name:localStorage.getItem('done.name'), score: localStorage.getItem('done.score'), kuy: true})
-			
-		}
+		
 	}
 	
 	
 
 	render() {
-			let msg, msgColor
-			if(this.state.name != ''){
-				if(this.state.score >= 9){
-					msg = `Dari hasil self declare anda, saudara ${this.state.name} harus dikarantina`
-					msgColor = 'red'
-				}else{
-					msg = `Dari hasil self declare anda, saudara ${this.state.name} diizinkan untuk WFO`
-					msgColor = 'green'
-				}
-			}
+			
 			
 			return (
 				<div className="app flex-row">

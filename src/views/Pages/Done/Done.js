@@ -50,7 +50,6 @@ class Done extends Component {
 		}
 		else{
 			this.setState({name:localStorage.getItem('done.name'), score: localStorage.getItem('done.score'), kuy: true})
-			
 		}
 	}
 	
@@ -60,7 +59,7 @@ class Done extends Component {
 			let msg, msgColor
 			if(this.state.name != ''){
 				if(this.state.score >= 9){
-					msg = `Dari hasil self declare anda, saudara ${this.state.name} harus dikarantina`
+					msg = `Dari hasil self declare anda, saudara ${this.state.name} tidak direkomendasikan untuk WFO`
 					msgColor = 'red'
 				}else{
 					msg = `Dari hasil self declare anda, saudara ${this.state.name} diizinkan untuk WFO`
