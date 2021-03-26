@@ -70,11 +70,11 @@ class Declare extends Component {
 			if(data){
 				this.setState({ques:data},this.fetchEmployeesData())
 			}else{
-				this.setState({alertMsg: 'Gagal mengambil data pertanyaan'}, this.showSnackBar())
+				this.setState({alertMsg: 'Gagal mengambil data pertanyaan, mohon reload halaman ini'}, this.showSnackBar())
 			}
 		})
 		.catch((error) => {
-			this.setState({alertMsg: 'Gagal mendapatkan data pertanyaan'}, this.showSnackBar())
+			this.setState({alertMsg: 'Gagal mendapatkan data pertanyaan, mohon reload halaman ini'}, this.showSnackBar())
 		});
 	}
 	
@@ -85,11 +85,11 @@ class Declare extends Component {
 			if(data){
 				this.setState({employees:data})
 			}else{
-				this.setState({alertMsg: 'Gagal mengambil data pegawai'}, this.showSnackBar())
+				this.setState({alertMsg: 'Gagal mengambil data pegawai, mohon reload halaman ini'}, this.showSnackBar())
 			}
 		})
 		.catch((error) => {
-			this.setState({alertMsg: 'Gagal mendapatkan data pegawai'}, this.showSnackBar())
+			this.setState({alertMsg: 'Gagal mendapatkan data pegawai, mohon reload halaman ini'}, this.showSnackBar())
 		});
 	}
 	
@@ -204,7 +204,7 @@ class Declare extends Component {
 			})
 			.catch((error) => {
 				console.log(error)
-				this.setState({alertMsg: 'Gagal simpan. Mohon cek koneksi anda'}, this.showSnackBar())
+				this.setState({alertMsg: 'Gagal simpan. Terjadi kesalahan pada system'}, this.showSnackBar())
 				this.setState({isLoading:false})
 			});
 	}
