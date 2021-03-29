@@ -190,7 +190,7 @@ class Declare extends Component {
 			.then(data => {
 				if(data.code == 200){
 					this.props.history.push({
-					  pathname: '/done',
+					  pathname: '/done/'+btoa(this.state.name)+'/'+btoa(data.score),
 					  state: {
 						score: data.score,
 						name: this.state.name

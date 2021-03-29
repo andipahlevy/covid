@@ -41,28 +41,32 @@ class Done extends Component {
 		let nm;
 		let sc;
 		console.log('this.props.location.state')
-		// console.log(this.props.location.state)
+		console.log(atob(this.props.match.params.name))
+		console.log(atob(this.props.match.params.score))
 		// console.log(typeof(this.props.location.state))
-		if( typeof(this.props.location.state) !== 'undefined'){
-			localStorage.setItem('done.name', this.props.location.state.name);
-			localStorage.setItem('done.score', this.props.location.state.score);
-			this.setState({name:this.props.location.state.name, score: this.props.location.state.score, kuy: true})
-		}
-		else{
-			this.setState({name:localStorage.getItem('done.name'), score: localStorage.getItem('done.score'), kuy: true})
-		}
+		
+		// if( typeof(this.props.location.state) !== 'undefined'){
+			// localStorage.setItem('done.name', this.props.location.state.name);
+			// localStorage.setItem('done.score', this.props.location.state.score);
+			// this.setState({name:this.props.location.state.name, score: this.props.location.state.score, kuy: true})
+		// }
+		// else{
+			// this.setState({name:localStorage.getItem('done.name'), score: localStorage.getItem('done.score'), kuy: true})
+		// }
 	}
 	
 	
 
 	render() {
 			let msg, msgColor
-			if(this.state.name != ''){
-				if(this.state.score >= 9){
-					msg = `Dari hasil self declare anda, saudara ${this.state.name} tidak direkomendasikan untuk WFO`
+			let nm = atob(this.props.match.params.name)
+			let sc = atob(this.props.match.params.score)
+			if(nm != ''){
+				if(sc >= 9){
+					msg = `Dari hasil self declare anda, saudara ${nm} tidak direkomendasikan untuk WFO`
 					msgColor = 'red'
 				}else{
-					msg = `Dari hasil self declare anda, saudara ${this.state.name} diizinkan untuk WFO`
+					msg = `Dari hasil self declare anda, saudara ${nm} diizinkan untuk WFO`
 					msgColor = 'green'
 				}
 			}
