@@ -55,7 +55,15 @@ class Done extends Component {
 		// }
 	}
 	
-	
+	today = ()=>{
+		var today = new Date();
+		var dd = String(today.getDate()).padStart(2, '0');
+		var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+		var yyyy = today.getFullYear();
+
+		today = dd + '/' + mm + '/' + yyyy;
+		return today
+	}
 
 	render() {
 			let msg, msgColor
@@ -63,10 +71,10 @@ class Done extends Component {
 			let sc = atob(this.props.match.params.score)
 			if(nm != ''){
 				if(sc >= 9){
-					msg = `Dari hasil self declare anda, saudara ${nm} tidak direkomendasikan untuk WFO`
+					msg = `Dari hasil self declare anda, saudara ${nm} tidak direkomendasikan utk WFO hari ini tgl ${this.today()}`
 					msgColor = 'red'
 				}else{
-					msg = `Dari hasil self declare anda, saudara ${nm} diizinkan untuk WFO`
+					msg = `Dari hasil self declare anda, saudara ${nm} diizinkan untuk WFO hari ini tgl ${this.today()}`
 					msgColor = 'green'
 				}
 			}
