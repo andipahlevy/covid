@@ -43,6 +43,7 @@ class Employee extends Component {
 			division_data	: [],
 			division	: '',
 			name	: '',
+			oldName	: '',
 			nik	: '',
 			location	: 'HEAD OFFICE',
 			updateTarget	: null,
@@ -94,6 +95,7 @@ class Employee extends Component {
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({
 				name: this.state.name,
+				old_name: this.state.oldName,
 				nik: this.state.nik,
 				division: this.state.division,
 				location: this.state.location,
@@ -197,7 +199,7 @@ class Employee extends Component {
 				this.setState({isLoading:false})
 			});
 		}
-		this.setState({division: this.state.grid[i].div, name:this.state.grid[i].label, nik:this.state.grid[i].nik},this.toggle())
+		this.setState({oldName: this.state.grid[i].label, division: this.state.grid[i].div, name:this.state.grid[i].label, nik:this.state.grid[i].nik},this.toggle())
 	}
 	
 	delete = (e,i)=>{
@@ -205,7 +207,7 @@ class Employee extends Component {
 		let del = window.confirm('Apakah anda akan menghapus data karyawan dengan nik '+this.state.grid[i].nik+' ?')
 		if(del){
 			this.setState({isLoading:true})
-			fetch(apiUri+'employee/delete.php?base_url='+apiUri+'&nik='+this.state.grid[i].nik)
+			fetch(apiUri+'employee/delete.php?div='+this.state.grid[i].div+'&name='+this.state.grid[i].label+'&base_url='+apiUri+'&nik='+this.state.grid[i].nik)
 			.then(response => response.json())
 			.then(data => {
 				if(data.code==200){
