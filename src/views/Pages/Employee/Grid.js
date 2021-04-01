@@ -39,8 +39,7 @@ class Employee extends Component {
 			grid: [],
 			modalo: false,
 			isLoading: false,
-			gridHeight: 'auto',
-			
+			gridHeight: 'auto',			
 			division_data	: [],
 			division	: '',
 			name	: '',
@@ -98,6 +97,7 @@ class Employee extends Component {
 				nik: this.state.nik,
 				division: this.state.division,
 				location: this.state.location,
+				base_url: apiUri,
 			})
 		};
 		this.setState({isLoading:true})
@@ -205,7 +205,7 @@ class Employee extends Component {
 		let del = window.confirm('Apakah anda akan menghapus data karyawan dengan nik '+this.state.grid[i].nik+' ?')
 		if(del){
 			this.setState({isLoading:true})
-			fetch(apiUri+'employee/delete.php?nik='+this.state.grid[i].nik)
+			fetch(apiUri+'employee/delete.php?base_url='+apiUri+'&nik='+this.state.grid[i].nik)
 			.then(response => response.json())
 			.then(data => {
 				if(data.code==200){

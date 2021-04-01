@@ -74,6 +74,29 @@ class Outstanding extends Component {
 			}
 		});
 	}
+	delDetail = (e,i)=>{
+		let dis = this
+		let del = window.confirm('Apakah anda akan menghapus data karantina dengan nama '+this.state.grid[i].name+' ?')
+		if(del){
+			this.setState({isLoading:true})
+			fetch(apiUri+'karantina/delete.php?id='+this.state.grid[i].id)
+			.then(response => response.json())
+			.then(data => {
+				if(data.code==200){
+					$('#trid-'+i).remove()
+					alert('Berhasil menghapus data');	
+				}else{
+					alert('Proses hapus gagal');
+				}
+				this.setState({isLoading:false})
+			})
+			.catch((error) => {
+				console.log(error)
+				alert('Gagal memproses data')
+				this.setState({isLoading:false})
+			});	
+		}
+	}
 
 	async componentDidMount() {
 		this.fetchData()
@@ -353,7 +376,7 @@ class Outstanding extends Component {
                   <tbody>
                   {
 					  this.state.grid.map((item, i)=>
-						<tr key={i}>
+						<tr key={i} {...{ "id": "trid-"+i }}>
 							<td>{item.region}</td>
 							<td>{item.company}</td>
 							<td>{item.bagian}</td>
@@ -392,6 +415,7 @@ class Outstanding extends Component {
 							<td><Input type="text" style={{ display: item.condition=='Sakit' ? 'block' : 'none' }} className="combo_wrap" value={item.condition_desc} onChange={(event)=>this.handleConditionDescChange(event, i)}/></td>
 							<td>
 								<Button onClick={(e)=>this.viewDetail(e,i)} color="success" className="btn-sm" active><i className="fa fa-eye"></i></Button>
+								<Button style={{ marginLeft:'5px' }} onClick={(e)=>this.delDetail(e,i)} color="danger" className="btn-sm" active><i className="fa fa-trash"></i></Button>
 							</td>
 						</tr>
 					  )

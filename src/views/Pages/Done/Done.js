@@ -81,7 +81,7 @@ class Done extends Component {
 			
 			return (
 				<div className="app flex-row">
-				<Container className="p-5">
+				<Container className="p-3">
 				  <Row className="justify-content-center">
 					<Col md="7" lg="7" xl="7">
 					<div id="cover-spin" style={{ display: this.state.isLoading ? 'block' : 'none' }}></div>

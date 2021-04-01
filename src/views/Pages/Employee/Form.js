@@ -49,8 +49,8 @@ class FormClass extends Component {
 			division	: '',
 			name	: '',
 			nik	: '',
-			location	: 'HEAD OFFICE',
-			
+			location	: 'HEAD OFFICE',			
+			base_url: apiUri,
 		}
 	}
 
