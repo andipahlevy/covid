@@ -69,12 +69,13 @@ class Done extends Component {
 			let msg, msgColor
 			let nm = atob(this.props.match.params.name)
 			let sc = atob(this.props.match.params.score)
+			let dt = atob(this.props.match.params.date)
 			if(nm != ''){
 				if(sc >= 9){
-					msg = `Dari hasil self declare anda, saudara ${nm} tidak direkomendasikan utk WFO hari ini tgl ${this.today()}`
+					msg = `Dari hasil self declare anda, saudara ${nm} tidak direkomendasikan utk WFO hari ini tgl ${dt}`
 					msgColor = 'red'
 				}else{
-					msg = `Dari hasil self declare anda, saudara ${nm} diizinkan untuk WFO hari ini tgl ${this.today()}`
+					msg = `Dari hasil self declare anda, saudara ${nm} diizinkan untuk WFO hari ini tgl ${dt}`
 					msgColor = 'green'
 				}
 			}

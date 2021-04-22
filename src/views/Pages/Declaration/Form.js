@@ -173,6 +173,16 @@ class Declare extends Component {
 		this.setState({ques: st})
 	}
 	
+	today = ()=>{
+		var today = new Date();
+		var dd = String(today.getDate()).padStart(2, '0');
+		var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+		var yyyy = today.getFullYear();
+
+		today = dd + '/' + mm + '/' + yyyy;
+		return today
+	}
+	
 	handleSubmit = (event)=>{
 		event.preventDefault();
 		if(this.state.name == ''){
@@ -190,7 +200,7 @@ class Declare extends Component {
 			.then(data => {
 				if(data.code == 200){
 					this.props.history.push({
-					  pathname: '/done/'+btoa(this.state.name)+'/'+btoa(data.score),
+					  pathname: '/done/'+btoa(this.state.name)+'/'+btoa(data.score)+'/'+btoa(this.today()),
 					  state: {
 						score: data.score,
 						name: this.state.name
