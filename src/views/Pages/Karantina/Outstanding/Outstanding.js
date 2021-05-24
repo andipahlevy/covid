@@ -130,7 +130,7 @@ class Outstanding extends Component {
 		$('.table-karantina thead tr').clone(true).appendTo( '.table-karantina thead' );
 		$('.table-karantina thead tr:eq(1) th').each( function (i) {
 			var title = $(this).text();
-			if(title =="Company" || title =="Bagian"){
+			if(title =="Company" || title =="Bagian" || title =="Kategori Karantina" || title =="Status" || title =="Region"){
 				$(this).html( '<input type="text" class ="form-control tfsearch" placeholder="Search" />' );
 		
 				$( 'input', this ).on( 'click change', function (event) {
@@ -422,6 +422,7 @@ class Outstanding extends Component {
 				  }
                   </tbody>
                 </Table>
+				<div style={{ padding:'10px' }}><h6>Total data { this.state.grid.length}</h6></div>
 				<Modal isOpen={this.state.modalConfirm} toggle={this.toggle2}
                           className={'modal-success modal-lg ' + this.props.className}>
                             <ModalHeader toggle={this.toggle2}>Konfirmasi</ModalHeader>
