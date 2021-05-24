@@ -172,3 +172,10 @@ div#DataTables_Table_1_filter {
 .container{
 	max-width: unset !important;
 }
+div.dataTables_wrapper {
+        width: 100%;
+        margin: 0 auto;
+    }
+th.sorting_disabled, tfoot tr th {
+    background: #fff;
+}

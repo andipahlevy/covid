@@ -23,9 +23,10 @@ import {
 import {
 	apiUri
 } from '../../../Constants';
-
+import queryString from 'query-string';
 import $ from "jquery"
-$.DataTable = require('datatables.net');
+$.DataTable = require('datatables.net-fixedcolumns');
+// require('datatables.net-fixedcolumns');
 
 class Outstanding extends Component {
 	_isMounted = false;
@@ -48,7 +49,33 @@ class Outstanding extends Component {
 			detailEndDate: '',
 			gridHeight: 'auto',
 			akanSelesaiKarantina: [],
+			f_region: '',
+			f_company: '',
+			f_bagian: '',
+			f_status: '',
+			f_kategori: '',
+			master_table: null
 		};
+	}
+	
+	handleFRegionChange = (e)=>{
+		this.setState({f_region:e.target.value})
+	}
+	
+	handleFCompanyChange = (e)=>{
+		this.setState({f_company:e.target.value})
+	}
+	
+	handleFBagianChange = (e)=>{
+		this.setState({f_bagian:e.target.value})
+	}
+	
+	handleFStatusChange = (e)=>{
+		this.setState({f_status:e.target.value})
+	}
+	
+	handleFKategoriChange = (e)=>{
+		this.setState({f_kategori:e.target.value})
 	}
 	
 	toggle = ()=> {
@@ -99,23 +126,42 @@ class Outstanding extends Component {
 	}
 
 	async componentDidMount() {
-		this.fetchData()
+		let params = queryString.parse(this.props.location.search)
+		if(params){
+			console.log(params)
+			this.setState({
+					f_region: params.region,
+					f_company: params.company,
+					f_bagian: params.bagian,
+					f_kategori: params.kategori,
+					f_status: params.status,
+				}, this.fetchData())
+		}else{
+			this.fetchData()
+		}
+		
 		console.log('ReactDOM.findDOMNode(this.refs.cobaaja)')
 		console.log(ReactDOM.findDOMNode(this.refs.cobaaja))
 		$('.table-responsive').css('height',(window.innerHeight - 200)+'px')
 		
-		// const script = document.createElement("link");
-		// script.href = "assets/css/jquery.dataTables.min.css";
-		// script.rel = "stylesheet";
-		// document.body.appendChild(script);
+		const script = document.createElement("link");
+		script.href = "https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css";
+		script.rel = "stylesheet";
+		document.body.appendChild(script);
 	}
 	
 	render_datatables(){
 		let dis = this
-		let table =  $('.table-karantina').DataTable({
-							fixedHeader: true,
+		let table =  $('.table-karantina2').DataTable({
+							scrollY:        350,
+							scrollX:        true,
+							scrollCollapse: true,
+							// fixedHeader: true,
 							"lengthChange": false,
 							"paging":   false,
+							fixedColumns: {
+							  leftColumns: 5
+							},
 							"ordering": false,
 							"info":     false,
 							"columnDefs": [
@@ -125,32 +171,75 @@ class Outstanding extends Component {
 									},
 									"targets": [0,1,2,3]
 								},
-							]
+								{
+									"searchable": false,
+									"orderable": false,
+									"targets": 0
+								}
+							],
+							initComplete: function () {
+								// this.api().columns().every(function (k) {
+									// if(k >= 0 && k < 4){
+										// var column = this;
+										// var input = document.createElement("input");
+										// $(input).appendTo($(column.footer()).empty())
+										// .on('change', function () {
+											// column.search($(this).val(), false, false, true).draw();
+										// }).attr('placeholder',' Cari');
+									// }
+								// });
+							}
 						});
-		$('.table-karantina thead tr').clone(true).appendTo( '.table-karantina thead' );
-		$('.table-karantina thead tr:eq(1) th').each( function (i) {
-			var title = $(this).text();
-			if(title =="Company" || title =="Bagian" || title =="Kategori Karantina" || title =="Status" || title =="Region"){
-				$(this).html( '<input type="text" class ="form-control tfsearch" placeholder="Search" />' );
+		table.on( 'order.dt search.dt', function () {
+			table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+				cell.innerHTML = i+1;
+				
+				$('.totku').html('Total '+parseInt(i+1)+' row data')
+			} );
+			
+		} ).draw();
+		// $('.table-karantina2 thead tr').clone(true).appendTo( '.table-karantina2 thead' );
+		// $('.table-karantina2 thead').append( $('.table-karantina2 thead ').html() );
+		// $('.table-karantina2 thead tr:eq(1) th').each( function (i) {
+			// var title = $(this).text();
+			// if(title =="Company" || title =="Bagian" || title =="Kategori Karantina" || title =="Status" || title =="Region"){
+				// $('.trg-filter').html($('.trg-filter').html()+ '<br/><input type="text" class ="form-control col-md-3 tfsearch" placeholder="Search" />' );
 		
-				$( 'input', this ).on( 'click change', function (event) {
-						if ( table.column(i).search() !== this.value ) {
-							table
-								.column(i)
-								.search( this.value )
-								.draw();
-						}
-				} );
-			}
-			else{
-				$(this).html( '<div style="width: auto;"></div>' );
-			}
-		} );
+				// $( 'input', this ).on( 'click change', function (event) {
+						// if ( table.column(i).search() !== this.value ) {
+							// table
+								// .column(i)
+								// .search( this.value )
+								// .draw();
+						// }
+				// } );
+			// }
+			// else{
+				// $(this).html( '<div style="width: auto;"></div>' );
+			// }
+		// } );
+		
+		this.setState({master_table:table})
 	}
 	
+	
 	fetchData = ()=>{
+		let params = queryString.parse(this.props.location.search)
+		console.log('sie,',params)
+		let search = {
+			region: params.region,
+			company: params.company,
+			bagian: params.bagian,
+			status: params.status,
+			kategori: params.kategori,
+		}
+		let params2 = queryString.stringify(search)
+		console.log('params2',params2, apiUri+'karantina/get.php?'+params2)
 		this.setState({isLoading:true})
-		fetch(apiUri+'karantina/get.php')
+		fetch(apiUri+'karantina/get.php?'+params2, { 
+														method: "GET", 
+													}
+					)
         .then(response => response.json())
         .then(data => {
 			if(data.code==200){
@@ -333,6 +422,21 @@ class Outstanding extends Component {
 		})
 		return final
 	}
+	
+	filter = ()=>{
+		let search = {
+			region: this.state.f_region,
+			company: this.state.f_company,
+			bagian: this.state.f_bagian,
+			status: this.state.f_status,
+			kategori: this.state.f_kategori,
+		}
+		// let params = queryString.parse(this.props.location.search)
+		let params = queryString.stringify(search)
+		console.log(params)
+		window.location.href=window.location.origin+'/#/karantina/?'+params
+		window.location.reload();
+	}
 
 	render() {
 		// if (this.state.isLoading) {
@@ -354,9 +458,32 @@ class Outstanding extends Component {
 			  <div id="cover-spin" style={{ display: this.state.isLoading ? 'block' : 'none' }}></div>
 			  
 				<h3>Data Karantina</h3>
-                <Table className="table-karantina text-nowrap" responsive>
+                
+				<div className="row">
+					<div className="col-md-3 p-3">
+						<Input type="text" name="regionn" id="regionn" placeholder="Filter by Region" value={this.state.f_region} onChange={this.handleFRegionChange}/>
+					</div>
+					<div className="col-md-3 p-3">
+						<Input type="text" name="company" id="company" placeholder="Filter by Company" value={this.state.f_company} onChange={this.handleFCompanyChange}/>
+					</div>
+					<div className="col-md-3 p-3">
+						<Input type="text" name="bagian" id="bagian" placeholder="Filter by Bagian" value={this.state.f_bagian} onChange={this.handleFBagianChange}/>
+					</div>
+					<div className="col-md-3 p-3">
+						<Input type="text" name="status" id="status" placeholder="Filter by Status" value={this.state.f_status} onChange={this.handleFStatusChange}/>
+					</div>
+					<div className="col-md-3 p-3">
+						<Input type="text" name="kategori" id="kategori" placeholder="Filter by Kategori" value={this.state.f_kategori} onChange={this.handleFKategoriChange}/>
+					</div>
+					<div className="col-md-3 p-3">
+						<Button onClick={this.filter} color="success" active>{this.state.isLoading?'Filtering...':'Filter'}</Button>
+					</div>
+				</div>
+				
+				 <table className="table-karantina2 text-nowrap stripe row-border order-column" style={{ width:'100%' }}>
                   <thead>
                   <tr>
+                    <th></th>
                     <th>Region</th>
                     <th>Company</th>
                     <th>Bagian</th>
@@ -377,6 +504,7 @@ class Outstanding extends Component {
                   {
 					  this.state.grid.map((item, i)=>
 						<tr key={i} {...{ "id": "trid-"+i }}>
+							<td></td>
 							<td>{item.region}</td>
 							<td>{item.company}</td>
 							<td>{item.bagian}</td>
@@ -421,8 +549,27 @@ class Outstanding extends Component {
 					  )
 				  }
                   </tbody>
-                </Table>
-				<div style={{ padding:'10px' }}><h6>Total data { this.state.grid.length}</h6></div>
+				  <tfoot>
+                  <tr>
+                    <th></th>
+                    <th>Region</th>
+                    <th>Company</th>
+                    <th>Bagian</th>
+                    <th>Nama</th>
+                    <th>Status</th>
+                    <th>Lokasi Karantina</th>
+                    <th>Mulai Karantina</th>
+                    <th>Selesai Karantina</th>
+                    <th>Kategori Karantina</th>
+                    <th>Alasan Dikarantina</th>
+                    <th>Tanggal Declare</th>
+                    <th>Kondisi Kesehatan</th>
+                    <th>Keterangan</th>
+                    <th>Detail</th>
+                  </tr>
+                  </tfoot>
+                </table>
+				<div style={{ padding:'10px' }}><h6 className="totku">Total data { this.state.grid.length}</h6></div>
 				<Modal isOpen={this.state.modalConfirm} toggle={this.toggle2}
                           className={'modal-success modal-lg ' + this.props.className}>
                             <ModalHeader toggle={this.toggle2}>Konfirmasi</ModalHeader>
