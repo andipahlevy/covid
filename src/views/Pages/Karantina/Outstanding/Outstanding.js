@@ -54,16 +54,53 @@ class Outstanding extends Component {
 			f_bagian: '',
 			f_status: '',
 			f_kategori: '',
-			master_table: null
+			master_table: null,
+			region_data: [],
+			company_data: [],
+			pilNonHO : ['ESTATE 1','ESTATE 2','ESTATE 3','MILL','BULKING','KARET'],
+			pilHO : ['HEAD OFFICE'],
+			pilBagian: []
 		};
 	}
 	
 	handleFRegionChange = (e)=>{
+		// this.setState({isLoading:true})
 		this.setState({f_region:e.target.value})
+		if(e.target.value){
+			this.getCompany(e.target.value)
+		}
+		
+	}
+	
+	getCompany(vals){
+		fetch(apiUri+'master/company.php?region='+btoa(vals))
+				.then(response => response.json())
+				.then(data => {
+					if(data.code==200){
+						this.setState({company_data: data.contents})
+					}else{
+						alert('Gagal get company');
+					}
+					// this.setState({isLoading:false})
+				})
+				.catch((error) => {
+					console.log(error)
+					alert('Gagal mengambil data company. Mohon cek koneksi anda atau tunggu beberapa saat')
+					// this.setState({isLoading:false})
+				});	
 	}
 	
 	handleFCompanyChange = (e)=>{
-		this.setState({f_company:e.target.value})
+		let val = e.target.value
+		this.setState({f_company:val}, ()=>{
+			if(val != ''){
+				if(val != 'TAP'){
+					this.setState({pilBagian:this.state.pilNonHO})
+				}else{
+					this.setState({pilBagian:this.state.pilHO})
+				}	
+			}
+		})
 	}
 	
 	handleFBagianChange = (e)=>{
@@ -148,6 +185,45 @@ class Outstanding extends Component {
 		script.href = "https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css";
 		script.rel = "stylesheet";
 		document.body.appendChild(script);
+		
+		this.fetchRegion()
+		
+		if(params.region){
+			this.getCompany(params.region)
+		}
+		if(params.company){
+			this.setState({f_company:params.company}, ()=>{
+				if(params.company != 'TAP'){
+					this.setState({pilBagian:this.state.pilNonHO})
+				}else{
+					this.setState({pilBagian:this.state.pilHO})
+				}
+			})
+		}
+		if(params.status){
+			this.setState({f_status:params.status})
+		}
+		if(params.kategori){
+			this.setState({f_kategori:params.kategori})
+		}
+	}
+	
+	fetchRegion(){
+		fetch(apiUri+'master/region.php')
+			.then(response => response.json())
+			.then(data => {
+				if(data.code==200){
+					this.setState({region_data: data.contents})
+				}else{
+					alert('Gagal get region');
+				}
+				this.setState({isLoading:false})
+			})
+			.catch((error) => {
+				console.log(error)
+				alert('Gagal mengambil data. Mohon cek koneksi anda atau tunggu beberapa saat')
+				this.setState({isLoading:false})
+			});
 	}
 	
 	render_datatables(){
@@ -188,6 +264,9 @@ class Outstanding extends Component {
 										// }).attr('placeholder',' Cari');
 									// }
 								// });
+								setTimeout(()=>{
+									$('.dataTables_scrollBody').css('max-height','364px')
+								},1500)
 							}
 						});
 		table.on( 'order.dt search.dt', function () {
@@ -461,22 +540,74 @@ class Outstanding extends Component {
                 
 				<div className="row">
 					<div className="col-md-3 p-3">
-						<Input type="text" name="regionn" id="regionn" placeholder="Filter by Region" value={this.state.f_region} onChange={this.handleFRegionChange}/>
+						<FormGroup>
+						  <Label htmlFor="region">Region</Label>
+						  <Input type="select" value={this.state.f_region} onChange={this.handleFRegionChange} name="region" id="region">
+							<option></option>
+							{
+								this.state.region_data.map((item,i)=>{
+									return <option>{item.region_name}</option>
+								})
+							}
+						  </Input>
+						</FormGroup>
 					</div>
 					<div className="col-md-3 p-3">
-						<Input type="text" name="company" id="company" placeholder="Filter by Company" value={this.state.f_company} onChange={this.handleFCompanyChange}/>
+						<FormGroup>
+						  <Label htmlFor="ba">Company</Label>
+						  <Input type="select" value={this.state.f_company} onChange={this.handleFCompanyChange} name="ba" id="ba">
+							<option></option>
+							{
+								this.state.company_data.map((item,i)=>{
+									return <option>{item.comp_name}</option>
+								})
+							}
+						  </Input>
+						</FormGroup>
 					</div>
 					<div className="col-md-3 p-3">
-						<Input type="text" name="bagian" id="bagian" placeholder="Filter by Bagian" value={this.state.f_bagian} onChange={this.handleFBagianChange}/>
+						<FormGroup>
+						  <Label htmlFor="bagian">Bagian</Label>
+						  <Input type="select" name="bagian" id="bagian" value={this.state.f_bagian} onChange={this.handleFBagianChange}>
+							<option></option>
+							{
+								this.state.pilBagian.map((item,i)=>{
+									return <option>{item}</option>
+								})
+							}
+						  </Input>
+						</FormGroup>
 					</div>
 					<div className="col-md-3 p-3">
-						<Input type="text" name="status" id="status" placeholder="Filter by Status" value={this.state.f_status} onChange={this.handleFStatusChange}/>
+						<FormGroup>
+						  <Label htmlFor="status">Status</Label>
+						  <Input type="select" name="status" id="status" value={this.state.f_status} onChange={this.handleFStatusChange}>
+							<option></option>
+							<option>Karyawan</option>
+							<option>Keluarga Karyawan</option>
+							<option>Calon Karyawan</option>
+							<option>Keluarga Calon Karyawan</option>
+						  </Input>
+						</FormGroup>
 					</div>
 					<div className="col-md-3 p-3">
-						<Input type="text" name="kategori" id="kategori" placeholder="Filter by Kategori" value={this.state.f_kategori} onChange={this.handleFKategoriChange}/>
+						<FormGroup>
+						  <Label htmlFor="category">Kategori Karantina</Label>
+						  <Input type="select" name="category" id="category" value={this.state.f_kategori} onChange={this.handleFKategoriChange}>
+							<option></option>
+							<option>Karantina Sehat</option>
+							<option>PDP</option>
+							<option>ODP</option>
+							<option>Positif Covid</option>
+						  </Input>
+						</FormGroup>
 					</div>
 					<div className="col-md-3 p-3">
-						<Button onClick={this.filter} color="success" active>{this.state.isLoading?'Filtering...':'Filter'}</Button>
+						<FormGroup>
+						  <br/>
+						  <Button style={{marginTop:'7px'}} onClick={this.filter} color="success" active>{this.state.isLoading?'Please wait...':'Filter'}</Button>
+						</FormGroup>
+						
 					</div>
 				</div>
 				
@@ -549,25 +680,7 @@ class Outstanding extends Component {
 					  )
 				  }
                   </tbody>
-				  <tfoot>
-                  <tr>
-                    <th></th>
-                    <th>Region</th>
-                    <th>Company</th>
-                    <th>Bagian</th>
-                    <th>Nama</th>
-                    <th>Status</th>
-                    <th>Lokasi Karantina</th>
-                    <th>Mulai Karantina</th>
-                    <th>Selesai Karantina</th>
-                    <th>Kategori Karantina</th>
-                    <th>Alasan Dikarantina</th>
-                    <th>Tanggal Declare</th>
-                    <th>Kondisi Kesehatan</th>
-                    <th>Keterangan</th>
-                    <th>Detail</th>
-                  </tr>
-                  </tfoot>
+				  
                 </table>
 				<div style={{ padding:'10px' }}><h6 className="totku">Total data { this.state.grid.length}</h6></div>
 				<Modal isOpen={this.state.modalConfirm} toggle={this.toggle2}
