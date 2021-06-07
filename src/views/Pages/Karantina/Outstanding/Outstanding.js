@@ -266,7 +266,7 @@ class Outstanding extends Component {
 								// });
 								setTimeout(()=>{
 									$('.dataTables_scrollBody').css('max-height','364px')
-								},1500)
+								},3000)
 							}
 						});
 		table.on( 'order.dt search.dt', function () {
