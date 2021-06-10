@@ -59,7 +59,7 @@ class Outstanding extends Component {
 			company_data: [],
 			pilNonHO : ['ESTATE 1','ESTATE 2','ESTATE 3','MILL','BULKING','KARET'],
 			pilHO : ['HEAD OFFICE'],
-			pilBagian: []
+			pilBagian: ['HEAD OFFICE','ESTATE 1','ESTATE 2','ESTATE 3','MILL','BULKING','KARET']
 		};
 	}
 	
@@ -67,13 +67,13 @@ class Outstanding extends Component {
 		// this.setState({isLoading:true})
 		this.setState({f_region:e.target.value})
 		if(e.target.value){
-			this.getCompany(e.target.value)
+			// this.getCompany(e.target.value)
 		}
 		
 	}
 	
-	getCompany(vals){
-		fetch(apiUri+'master/company.php?region='+btoa(vals))
+	getCompany(){
+		fetch(apiUri+'master/company.php')
 				.then(response => response.json())
 				.then(data => {
 					if(data.code==200){
@@ -93,13 +93,13 @@ class Outstanding extends Component {
 	handleFCompanyChange = (e)=>{
 		let val = e.target.value
 		this.setState({f_company:val}, ()=>{
-			if(val != ''){
-				if(val != 'TAP'){
-					this.setState({pilBagian:this.state.pilNonHO})
-				}else{
-					this.setState({pilBagian:this.state.pilHO})
-				}	
-			}
+			// if(val != ''){
+				// if(val != 'TAP'){
+					// this.setState({pilBagian:this.state.pilNonHO})
+				// }else{
+					// this.setState({pilBagian:this.state.pilHO})
+				// }	
+			// }
 		})
 	}
 	
@@ -188,9 +188,8 @@ class Outstanding extends Component {
 		
 		this.fetchRegion()
 		
-		if(params.region){
-			this.getCompany(params.region)
-		}
+		this.getCompany()
+		
 		if(params.company){
 			this.setState({f_company:params.company}, ()=>{
 				if(params.company != 'TAP'){
