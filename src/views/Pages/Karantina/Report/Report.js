@@ -110,6 +110,11 @@ class DailyAssessmentInput extends Component {
 		window.location.href=apiUri+'report/daily.php';
 	}
 	
+	downloadRAD = (e)=>{
+		e.preventDefault();
+		window.location.href=apiUri+'report/dailyDone.php';
+	}
+	
 	downloadRB = (e)=>{
 		e.preventDefault();
 		if(!this.state.start_date || !this.state.end_date){
@@ -183,6 +188,15 @@ class DailyAssessmentInput extends Component {
 							<button className="btn btn-primary" onClick={this.downloadRC}>Download</button>
 						</InputGroupAddon>
                     </InputGroup>
+                </CardBody>
+              </Card>
+            </Col>
+			<Col md="4" lg="4" xl="4">
+              <Card className="text-black bg-default ">
+                <CardBody className="p-4">
+                  <h5 class="card-title">Daily Report</h5>
+					<p class="card-text">Report data selesai karantina</p>
+					<a href="#" onClick={this.downloadRAD} class="btn btn-primary">Download</a>
                 </CardBody>
               </Card>
             </Col>
